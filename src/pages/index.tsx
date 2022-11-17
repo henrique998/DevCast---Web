@@ -3,12 +3,12 @@ import { Envelope } from "phosphor-react"
 import { Button } from "../components/Button"
 import { ButtonLink } from "../components/ButtonLink"
 import { Input } from "../components/Input"
-import { HomeContainer, HomeHeader, TextsContainer, UsersCountContainer } from "../styles/pages/home"
+import { LandingContainer, LandingHeader, TextsContainer, UsersCountContainer } from "../styles/pages/landing"
 
 function Landing() {
   return (
-    <HomeContainer>
-      <HomeHeader>
+    <LandingContainer>
+      <LandingHeader>
         <div className="container">
           <Image
             src="/Logo.svg"
@@ -31,7 +31,7 @@ function Landing() {
             />
           </div>
         </div>
-      </HomeHeader>
+      </LandingHeader>
 
       <section>
         <TextsContainer>
@@ -112,7 +112,7 @@ function Landing() {
           height={1680}
         />  
       </section>        
-    </HomeContainer>
+    </LandingContainer>
   )
 }
 

@@ -8,34 +8,34 @@ function Playlists() {
     <DefaultLayout>
       <PlaylistsContainer>
         <PlaylistsWrapper>
-            <header>
-                <h1>
-                    Crie e organize as suas <strong>playlists</strong> e adicione <br /> 
-                    <strong>episódios</strong> para ouvir mais tarde
-                </h1>
+          <header>
+            <h1>
+              Crie e organize as suas <strong>playlists</strong> e adicione <br /> 
+              <strong>episódios</strong> para ouvir mais tarde
+            </h1>
 
-                <p>Guarde os seu episódios favoritos em playlists personalizadas</p>
-            </header>
+            <p>Guarde os seu episódios favoritos em playlists personalizadas</p>
+          </header>
 
-            <AddButton>
-                <PlusCircle size={32} />
+          <AddButton>
+            <PlusCircle size={32} />
 
-                <span>Criar Playlist</span>
-            </AddButton>
+            <span>Criar Playlist</span>
+          </AddButton>
 
-            <ProfilePlaylistsContainer>
-                <h2>Suas playlists</h2>
+          <ProfilePlaylistsContainer>
+            <h2>Suas playlists</h2>
 
-                <ul>
-                    <li>
-                        <PlaylistCard 
-                            path="/playlist/01"
-                            thumbnailUrl="/card-image.png"
-                            name="HTML e Css"
-                        />
-                    </li>
-                </ul>
-            </ProfilePlaylistsContainer>
+            <ul>
+              <li>
+                <PlaylistCard 
+                  path="/playlist/01"
+                  thumbnailUrl="/card-image.png"
+                  name="HTML e Css"
+                />
+              </li>
+            </ul>
+          </ProfilePlaylistsContainer>
         </PlaylistsWrapper> 
       </PlaylistsContainer>
     </DefaultLayout>

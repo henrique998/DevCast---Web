@@ -4,12 +4,17 @@ import { PlayButtonContainer } from "./styles";
 
 interface PlayButtonProps extends ComponentProps<typeof PlayButtonContainer> {
     variant?: 'filled' | 'outlined'
+    label?: string
 }
 
-export function PlayButton({ variant = "filled", ...rest }: PlayButtonProps) {
+export function PlayButton({ variant = "filled", label, ...rest }: PlayButtonProps) {
    return (
     <PlayButtonContainer {...rest} variant={variant}>
-        <Play size={14} weight="fill" />
+        <div className="icon-container">
+            <Play size={14} weight="fill" />
+        </div>
+
+        <span>{label}</span>
     </PlayButtonContainer>
    )
 }

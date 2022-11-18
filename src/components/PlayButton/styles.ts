@@ -13,9 +13,19 @@ export const PlayButtonContainer = styled.button<PlayButtonContainerProps>`
     transition: 0.2s;
 
     ${props => props.variant === "filled" && css`
-        svg {
-            color: ${props.theme.purple};
-            /* border-radius: 50%; */
+        .icon-container {
+            width: 1.75rem;
+            height: 1.75rem;
+            border-radius: 50%;
+            background-color: ${props => props.theme.purple};
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            svg {
+                color: ${props.theme.white};
+            }
         }
 
         &:hover {

@@ -1,7 +1,14 @@
 import { PlusCircle } from "phosphor-react"
+import * as Dialog from "@radix-ui/react-dialog"
 import { PlaylistCard } from "../components/PlaylistCard"
 import { DefaultLayout } from "../layouts/DefaultLayout"
-import { AddButton, PlaylistsContainer, PlaylistsWrapper, ProfilePlaylistsContainer } from "../styles/pages/playlists"
+import { 
+  AddButton, 
+  PlaylistsContainer, 
+  PlaylistsWrapper, 
+  ProfilePlaylistsContainer 
+} from "../styles/pages/playlists"
+import { ModalContent } from "../components/ModalContent"
 
 function Playlists() {
   return (
@@ -17,11 +24,17 @@ function Playlists() {
             <p>Guarde os seu episódios favoritos em playlists personalizadas</p>
           </header>
 
-          <AddButton>
-            <PlusCircle size={32} />
+          <Dialog.Root>
+            <Dialog.Trigger asChild>
+              <AddButton>
+                <PlusCircle size={32} />
 
-            <span>Criar Playlist</span>
-          </AddButton>
+                <span>Criar Playlist</span>
+              </AddButton>
+            </Dialog.Trigger>
+
+            <ModalContent />
+          </Dialog.Root>
 
           <ProfilePlaylistsContainer>
             <h2>Suas playlists</h2>

@@ -46,7 +46,7 @@ function SignUp() {
             />
         </header>
 
-        <Separator />
+        <Separator label="Ou" />
 
         <form>
             <InputGroup>

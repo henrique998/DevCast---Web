@@ -1,9 +1,13 @@
 import { SeparatorContainer, SeparatorIndicator } from "./styles";
 
-export function Separator() {
+interface SeparatorProps {
+    label: string
+}
+
+export function Separator({ label }: SeparatorProps) {
    return (
     <SeparatorContainer>
-        <SeparatorIndicator /> Ou <SeparatorIndicator />
+        <SeparatorIndicator /> {label} <SeparatorIndicator />
     </SeparatorContainer>
    )
 }

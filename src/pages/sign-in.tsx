@@ -28,7 +28,7 @@ function SignIn() {
             />
         </header>
 
-        <Separator />
+        <Separator label="Ou" />
 
         <form>
             <InputGroup>

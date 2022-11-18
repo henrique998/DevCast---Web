@@ -16,7 +16,7 @@ export const PlaylistCardContainer = styled(Link)`
             position: absolute;
             top: 0;
             right: 0;
-            z-index: 90;
+            z-index: 10;
 
             background-color: rgba(99, 59, 188, 0.5);
             border-radius: 0 8px 8px 0;

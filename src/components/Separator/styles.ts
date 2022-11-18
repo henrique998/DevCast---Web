@@ -13,8 +13,8 @@ export const SeparatorContainer = styled(Separator.Root)`
 
 export const SeparatorIndicator = styled(Separator.Separator)`
     max-width: 16rem;
-
     width: 100%;
     height: 1px;
+
     background-color: ${props => props.theme.gray600};
 `

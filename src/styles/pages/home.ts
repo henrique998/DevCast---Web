@@ -8,6 +8,8 @@ export const HomeContainer = styled.section`
 export const HomeWrapper = styled.div`
     max-width: 58.125rem;
     margin: 0 auto;
+
+    padding-bottom: 3.125rem;
 `
 
 export const LastReleasesContainer = styled.div`
@@ -26,5 +28,18 @@ export const LastReleasesContainer = styled.div`
         display: flex;
         align-items: center;
         gap: 2.5rem;
+    }
+`
+
+export const AllRealeasesTableContainer = styled.div`
+    margin-top: 2.5rem;
+
+    h2 {
+        margin-bottom: 1.875rem;
+
+        font-size: 1.25rem;
+        font-weight: 600;
+
+        color: ${props => props.theme.gray600};
     }
 `

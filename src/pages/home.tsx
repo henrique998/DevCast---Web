@@ -1,6 +1,9 @@
 import { EpisodeCard } from "../components/EpisodeCard"
+import { Player } from "../components/Player"
+import { Table } from "../components/Table"
 import { DefaultLayout } from "../layouts/DefaultLayout"
-import { HomeContainer, HomeWrapper, LastReleasesContainer } from "../styles/pages/home"
+import { AllRealeasesTableContainer, HomeContainer, HomeWrapper, LastReleasesContainer } from "../styles/pages/home"
+import { tableData } from "../utils/table.data"
 
 function Home() {
   return (
@@ -56,6 +59,14 @@ function Home() {
               </li>
             </ul>
           </LastReleasesContainer>
+
+          <AllRealeasesTableContainer>
+            <h2>Todos os lançamentos</h2>
+             
+            <Table episodes={tableData} />
+          </AllRealeasesTableContainer>
+
+          <Player />
         </HomeWrapper>
       </HomeContainer>
     </DefaultLayout>

@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { Swiper } from "swiper/react"
 
 export const HomeContainer = styled.section`
     height: calc(100vh - 4.375rem);
@@ -10,6 +11,10 @@ export const HomeWrapper = styled.div`
     margin: 0 auto;
 
     padding-bottom: 3.125rem;
+
+    @media (max-width: 414px) {
+        padding: 1rem;
+    }
 `
 
 export const LastReleasesContainer = styled.div`
@@ -29,6 +34,23 @@ export const LastReleasesContainer = styled.div`
         align-items: center;
         gap: 2.5rem;
     }
+
+    @media (max-width: 414px) {
+        max-width: 400px;
+        padding: 0 1rem;
+
+        > ul {
+            display: none;
+        }
+    }
+`
+
+export const MobileCarrousselContainer = styled.div`
+    display: none;
+
+    @media (max-width: 414px) {
+        display: block;
+    }
 `
 
 export const AllRealeasesTableContainer = styled.div`
@@ -41,5 +63,10 @@ export const AllRealeasesTableContainer = styled.div`
         font-weight: 600;
 
         color: ${props => props.theme.gray600};
+    }
+
+    @media (max-width: 414px) {
+        max-width: 400px;
+        padding: 0 1rem;
     }
 `

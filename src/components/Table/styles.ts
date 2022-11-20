@@ -68,4 +68,42 @@ export const TableContainer = styled.table`
             }
         }
     }
+
+    @media (max-width: 414px) {
+        display: block;
+
+        overflow-x: scroll;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        th {
+            padding-right: 2rem;
+        }
+
+        th:nth-child(2) {
+            padding-left: 2rem;
+        }
+
+        td:nth-child(2) {
+            padding-left: 2rem;
+        }
+
+        th:nth-child(3) {
+            padding-left: 2rem;
+        }
+
+        td:nth-child(3) {
+            padding-left: 2rem;
+        }
+
+        th:nth-child(4) {
+            padding-left: 2rem;
+        }
+
+        td:nth-child(4) {
+            padding-left: 2rem;
+        }
+    }
 `

@@ -1,11 +1,31 @@
 import Image from "next/image"
-import { Envelope } from "phosphor-react"
+import { Envelope, List } from "phosphor-react"
+import { useState } from "react"
+
 import { Button } from "../components/Button"
 import { ButtonLink } from "../components/ButtonLink"
 import { Input } from "../components/Input"
-import { LandingContainer, LandingHeader, TextsContainer, UsersCountContainer } from "../styles/pages/landing"
+import { MobileMenu } from "../components/MobileMenu"
+
+import { 
+  LandingContainer, 
+  LandingHeader, 
+  MenuButton,
+  TextsContainer, 
+  UsersCountContainer 
+} from "../styles/pages/landing"
 
 function Landing() {
+  const [isMenuMobileOpen, setIsMenuMobileOpen] = useState(false)
+
+  function handleOpenMenuMobile() {
+    setIsMenuMobileOpen(true)
+  }
+
+  function handleCloseMenuMobile() {
+    setIsMenuMobileOpen(false)
+  }
+
   return (
     <LandingContainer>
       <LandingHeader>
@@ -30,6 +50,10 @@ function Landing() {
               path="/sign-up" 
             />
           </div>
+
+          <MenuButton onClick={handleOpenMenuMobile}>
+            <List size={28} weight="fill" />
+          </MenuButton>
         </div>
       </LandingHeader>
 
@@ -112,6 +136,11 @@ function Landing() {
           height={1680}
         />  
       </section>        
+
+      <MobileMenu 
+        isOpen={isMenuMobileOpen}
+        onClose={handleCloseMenuMobile}
+      />
     </LandingContainer>
   )
 }

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { SlidersHorizontal } from "phosphor-react";
 import { Avatar } from "./Avatar";
@@ -11,6 +10,14 @@ export function Header() {
 
   return (
   <HeaderContainer>
+    <Image 
+      src="/Logo.svg"
+      alt=""
+      width={118}
+      height={32}
+      className="logo"
+    />
+
     <span>Olá henrique! vamos ouvir alguma coisa?</span>
 
     <div>

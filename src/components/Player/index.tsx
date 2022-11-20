@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { HandsClapping, Pause, Play, Repeat, Shuffle, SkipBack, SkipForward, Star } from "phosphor-react"
+import { HandsClapping, Pause, Play, Queue, Repeat, Shuffle, SkipBack, SkipForward, Star } from "phosphor-react"
 import { useState } from "react"
 
 import { 
@@ -79,6 +79,10 @@ export function Player() {
 
             <SecondaryControllButton isActive={false}>
                 <Star size={28} weight="fill" />
+            </SecondaryControllButton>
+
+            <SecondaryControllButton isActive={false}>
+                <Queue size={28} weight="fill" />
             </SecondaryControllButton>
 
             <SecondaryControllButton isActive>

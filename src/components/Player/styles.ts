@@ -4,7 +4,6 @@ import * as Slider from "@radix-ui/react-slider"
 export const PlayerContainer = styled.div`
     max-width: 70rem;
     width: 100%;
-    /* height: 6.25rem; */
 
     margin-left: 18.5rem;
 
@@ -21,6 +20,10 @@ export const PlayerContainer = styled.div`
     bottom: 1.875rem;
     right: 1.875rem;
     z-index: 100;
+
+    @media (max-width: 414px) {
+        display: none;
+    }
 `
 
 export const EpisodeDetailsContainer = styled.div`

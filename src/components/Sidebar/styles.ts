@@ -33,6 +33,10 @@ export const SidebarContainer = styled.aside`
             }
         }
     }
+
+    @media (max-width: 414px) {
+        display: none;
+    }
 `
 
 interface NavLinkContainerProps {

@@ -21,6 +21,21 @@ export const LandingContainer = styled.main`
             height: 30rem;
         }
     }
+
+    @media (max-width: 414px) {
+        background-image: url('/mobile-background-layer.svg');
+
+        section {
+            align-items: flex-start;
+
+            margin-top: 5rem;
+            max-width: 392px;
+
+            > img {
+                display: none;
+            }
+        }
+    }
 `
 
 export const LandingHeader = styled.header`
@@ -44,6 +59,23 @@ export const LandingHeader = styled.header`
             align-items: center;
             gap: 1rem;
         }
+
+        @media (max-width: 414px) {
+            max-width: 392px;
+
+            > div {
+                display: none;
+            }
+        }
+    }
+
+`
+
+export const MenuButton = styled.button`
+    display: none;
+
+    @media (max-width: 414px) {
+        display: block;
     }
 `
 
@@ -93,6 +125,45 @@ export const TextsContainer = styled.div`
             max-width: 9.375rem;
         }
     }
+
+    @media (max-width: 414px) {
+        text-align: center;
+
+        h1 {
+            font-size: 1.375rem;
+        }
+
+        p {
+            margin-top: 2rem;
+            
+            font-size: 0.875rem;
+        }
+
+        > span {
+            margin-top: 2rem;
+
+            font-size: 0.875rem;
+        }
+
+        form {
+            margin-top: 2rem;
+
+            flex-direction: column;
+            height: fit-content;
+            max-width: 24.5rem;
+
+            .input {
+                width: 100%;
+            }
+
+            button {
+                max-width: 24.5rem;
+                width: 100%;
+
+                height: 3.125rem;
+            }
+        }
+    }
 `
 
 export const UsersCountContainer = styled.div`
@@ -125,6 +196,17 @@ export const UsersCountContainer = styled.div`
         strong {
             display: block;
             color: ${props => props.theme.purple};
+        }
+    }
+
+    @media (max-width: 414px) {
+        flex-direction: column;
+        align-items: flex-start;
+
+        span {
+            display: block;
+
+            text-align: left;
         }
     }
 `

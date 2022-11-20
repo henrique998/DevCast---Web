@@ -49,6 +49,16 @@ export const LoginContainer = styled.div`
         display: grid;
         gap: 1.5rem;
     }
+
+    @media (max-width: 414px) {
+        header {
+            margin-top: 2.5rem;
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    } 
 `
 
 export const Message = styled.span`
@@ -124,5 +134,9 @@ export const BrandContainer = styled.aside`
             font-size: 1rem;
             font-weight: 500;
         }
+    }
+
+    @media (max-width: 414px) {
+        display: none;
     }
 `

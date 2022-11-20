@@ -6,12 +6,17 @@ import styled, { css } from "styled-components";
 export const HeaderContainer = styled.header`
     height: 4.375rem;
     border-bottom: 1px solid ${props => props.theme.gray200};
+    background-color: ${props => props.theme.gray900};
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     padding: 0 1.875rem;
+
+    .logo {
+        display: none;
+    }
 
     span {
         display: block;
@@ -31,6 +36,26 @@ export const HeaderContainer = styled.header`
             height: 2.25rem;
             border-radius: 50%;
             object-fit: cover;
+        }
+    }
+
+    @media (max-width: 414px) {
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        z-index: 100;
+
+        width: 100%;
+
+        padding: 0 1.375rem;
+
+        > span {
+            display: none;
+        }
+
+        > .logo {
+            display: block;
         }
     }
 `

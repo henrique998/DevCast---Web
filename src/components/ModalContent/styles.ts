@@ -25,10 +25,6 @@ export const DialogContent = styled(Dialog.Content)`
     background-color: ${props => props.theme.gray300};
 
     border-radius: 8px;
-
-    .content-container {
-        
-    }
 `
 
 export const DialogClose = styled(Dialog.Close)`

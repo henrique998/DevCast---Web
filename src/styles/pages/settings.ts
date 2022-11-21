@@ -69,6 +69,31 @@ export const SettingsContainer = styled.section`
             }
         }
     }
+
+    @media (max-width: 414px) {
+        max-width: 392px;
+        padding-left: 1rem; 
+        padding-right: 1rem; 
+        padding-bottom: 6.875rem;
+
+        h1 {
+            margin-top: 6.875rem;
+            font-size: 1.5rem;
+        }
+
+        > div {
+            flex-direction: column;
+
+            img {
+                width: 9.375rem;
+                height: 9.375rem;
+            }
+
+            button {
+                width: 10.375rem;
+            }
+        }
+    }
 `
 
 export const Form = styled.form`

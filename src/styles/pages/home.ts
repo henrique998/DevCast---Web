@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import { Swiper } from "swiper/react"
 
 export const HomeContainer = styled.section`
     height: calc(100vh - 4.375rem);
@@ -8,12 +7,17 @@ export const HomeContainer = styled.section`
 
 export const HomeWrapper = styled.div`
     max-width: 58.125rem;
-    margin: 0 auto;
 
-    padding-bottom: 3.125rem;
+    margin-top: 5rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    padding-bottom: 6.875rem;
 
     @media (max-width: 414px) {
-        padding: 1rem;
+        padding-top: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 `
 
@@ -50,6 +54,10 @@ export const MobileCarrousselContainer = styled.div`
 
     @media (max-width: 414px) {
         display: block;
+
+        li {
+            width: 20rem;
+        }
     }
 `
 

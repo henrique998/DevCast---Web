@@ -1,5 +1,19 @@
 import Image from "next/image"
-import { CaretDown, CaretUp, HandsClapping, Play, Queue, Repeat, Shuffle, SkipBack, SkipForward, Star, X } from "phosphor-react"
+import { 
+    CaretDown, 
+    CaretUp, 
+    HandsClapping, 
+    Play, 
+    Queue, 
+    Repeat, 
+    Shuffle, 
+    SkipBack, 
+    SkipForward, 
+    Star, 
+    X 
+} from "phosphor-react"
+import * as Dialog from "@radix-ui/react-dialog"
+import * as ToastPrimitive from "@radix-ui/react-toast"
 
 import { 
     Container,
@@ -16,6 +30,7 @@ import {
     PlayerControll, 
     PreviewMobileSliderContainer
 } from "./styles"
+import { ModalContent } from "../ModalContent"
 
 export function MobilePlayer() {
    const isShowingDetails = false 
@@ -72,9 +87,15 @@ export function MobilePlayer() {
                 />
 
                 <div className="details">
-                    <MobilePlayerButton isActive={false}>
-                        <Queue size={28} weight="fill" />
-                    </MobilePlayerButton>
+                    <Dialog.Root>
+                        <Dialog.Trigger asChild>
+                            <MobilePlayerButton isActive={false}>
+                                <Queue size={28} weight="fill" />
+                            </MobilePlayerButton>
+                        </Dialog.Trigger>
+
+                        <ModalContent />
+                    </Dialog.Root>
 
                     <div className="texts">
                         <h2>A vida é boa</h2>

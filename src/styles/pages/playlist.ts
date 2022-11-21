@@ -59,8 +59,41 @@ export const Banner = styled.div`
 
         background-image: url('/banner-layer.png');
     }
+
+    @media (max-width: 414px) {
+        margin-top: 4.375rem;
+        border-radius: 0;
+        height: 17.25rem;
+        
+        display: grid;
+        justify-content: center;
+
+        img {
+            margin-left: auto;
+        }
+
+        .texts-container {
+            margin-top: 1.5rem;
+            margin-left: 0;
+            text-align: center;
+
+            padding: 0 1rem;
+        }
+
+        .image-container {
+            display: none;
+        }
+    }
 `
 
 export const EpisodesTableContainer = styled.div`
     margin-top: 2.5rem;
+
+    @media (max-width: 414px) {
+        max-width: 392px;
+        padding: 0 1rem;
+
+        margin-left: auto;
+        margin-right: auto;
+    }
 `

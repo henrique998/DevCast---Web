@@ -61,4 +61,26 @@ export const PlaylistCardContainer = styled(Link)`
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    @media (max-width: 414px) {
+        .thumbnail-container {
+            img {
+                width: 21.875rem;
+                height: 21.875rem;
+            }
+
+            .layer {
+                width: 50%;
+                height: 21.875rem;
+
+                span {
+                    font-size: 1.25rem;
+                }
+            }
+        }
+
+        h3 {
+            font-size: 1.25rem;
+        }
+    }
 `

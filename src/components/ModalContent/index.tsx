@@ -22,7 +22,11 @@ import {
     PlaylistsWrapper 
 } from "./styles"
 
-export function ModalContent() {
+interface ModalContentProps {
+    hasPlaylistsCarroussel?: boolean
+}
+
+export function ModalContent({ hasPlaylistsCarroussel = true }: ModalContentProps) {
    return (
     <Dialog.Portal>
         <DialogOverlay />
@@ -32,67 +36,71 @@ export function ModalContent() {
                 <XCircle size={24} />
             </DialogClose>
 
-            <DialogTitle>Adicionar a playlist</DialogTitle>
+            <DialogTitle>{hasPlaylistsCarroussel ? 'Adicionar a playlist' : 'Criar playlist'}</DialogTitle>
 
             <ContentContainer>
-                <PlaylistsWrapper>
-                    <RadioGroup.Root>
-                        <Swiper
-                            slidesPerView={5}
-                            spaceBetween={20}
-                        >
-                            <SwiperSlide>
-                                <li>
-                                    <PlaylistMiniCard value="01" />
-                                </li>
-                            </SwiperSlide>
+                {hasPlaylistsCarroussel && (
+                    <>
+                        <PlaylistsWrapper>
+                            <RadioGroup.Root>
+                                <Swiper
+                                    slidesPerView={5}
+                                    spaceBetween={20}
+                                >
+                                    <SwiperSlide>
+                                        <li>
+                                            <PlaylistMiniCard value="01" />
+                                        </li>
+                                    </SwiperSlide>
 
-                            <SwiperSlide>
-                                <li>
-                                    <PlaylistMiniCard value="02" />
-                                </li>
-                            </SwiperSlide>
+                                    <SwiperSlide>
+                                        <li>
+                                            <PlaylistMiniCard value="02" />
+                                        </li>
+                                    </SwiperSlide>
 
-                            <SwiperSlide>
-                                <li>
-                                    <PlaylistMiniCard value="03" />
-                                </li>
-                            </SwiperSlide>
+                                    <SwiperSlide>
+                                        <li>
+                                            <PlaylistMiniCard value="03" />
+                                        </li>
+                                    </SwiperSlide>
 
-                            <SwiperSlide>
-                                <li>
-                                    <PlaylistMiniCard value="04" />
-                                </li>
-                            </SwiperSlide>
+                                    <SwiperSlide>
+                                        <li>
+                                            <PlaylistMiniCard value="04" />
+                                        </li>
+                                    </SwiperSlide>
 
-                            <SwiperSlide>
-                                <li>
-                                    <PlaylistMiniCard value="05" />
-                                </li>
-                            </SwiperSlide>
+                                    <SwiperSlide>
+                                        <li>
+                                            <PlaylistMiniCard value="05" />
+                                        </li>
+                                    </SwiperSlide>
 
-                            <SwiperSlide>
-                                <li>
-                                    <PlaylistMiniCard value="06" />
-                                </li>
-                            </SwiperSlide>
+                                    <SwiperSlide>
+                                        <li>
+                                            <PlaylistMiniCard value="06" />
+                                        </li>
+                                    </SwiperSlide>
 
-                            <SwiperSlide>
-                                <li>
-                                    <PlaylistMiniCard value="07" />
-                                </li>
-                            </SwiperSlide>
-                        </Swiper>
-                    </RadioGroup.Root>
+                                    <SwiperSlide>
+                                        <li>
+                                            <PlaylistMiniCard value="07" />
+                                        </li>
+                                    </SwiperSlide>
+                                </Swiper>
+                            </RadioGroup.Root>
 
-                    <Button label="Adicionar" />
-                </PlaylistsWrapper>
+                            <Button label="Adicionar" />
+                        </PlaylistsWrapper>
 
-                <FormSeparator>
-                    <FormSeparatorIndicator /> 
-                        Ou crie uma nova
-                    <FormSeparatorIndicator /> 
-                </FormSeparator>
+                        <FormSeparator>
+                            <FormSeparatorIndicator /> 
+                                Ou crie uma nova
+                            <FormSeparatorIndicator /> 
+                        </FormSeparator>
+                    </>
+                )}
 
                 <form>
                     <InputGroup>

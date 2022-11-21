@@ -17,7 +17,7 @@ export const EpisodeCardContainer = styled(Link)`
             position: absolute;
             right: 0.75rem;
             bottom: 0.75rem;
-            z-index: 100;
+            z-index: 80;
         }
     }
 
@@ -74,13 +74,33 @@ export const EpisodeCardContainer = styled(Link)`
             text-overflow: ellipsis;
         }
     }
+
+    @media (max-width: 414px) {
+        .thumbnail-container {
+            img {
+                max-width: 21.875rem;
+                width: 100%;
+                height: 21.875rem;
+            }
+        }
+
+        h3 {
+            font-size: 1.25rem;
+
+            max-width: 21.875rem;
+        }
+
+        .info-container {
+            justify-content: left;
+        }
+    }
 `
 
 export const DurationBadge = styled.div`
     position: absolute;
     top: 0.75rem;
     left: 0.75rem;
-    z-index: 100;
+    z-index: 80;
 
     height: 1.75rem;
     max-width: 5rem;

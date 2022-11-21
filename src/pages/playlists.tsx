@@ -47,7 +47,7 @@ function Playlists() {
               </AddButton>
             </Dialog.Trigger>
 
-            <ModalContent />
+            <ModalContent hasPlaylistsCarroussel={false} />
           </Dialog.Root>
 
           <ProfilePlaylistsContainer>

@@ -74,8 +74,8 @@ function Home() {
             <MobileCarrousselContainer>
               <ul>
                 <Swiper
-                  slidesPerView={1.75}
-                  spaceBetween={24}
+                  slidesPerView={1.2}
+                  spaceBetween={18}
                 >
                   <li>
                     <SwiperSlide>

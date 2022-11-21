@@ -9,28 +9,28 @@ function Playlist() {
     <DefaultLayout>
       <PlaylistContainer>
         <PlaylistWrapper>
-            <Banner>
-                <div className="texts-container">
-                    <h1>HTML e Css</h1>
+          <Banner>
+              <div className="texts-container">
+                  <h1>HTML e Css</h1>
 
-                    <p>Aproveite agora mesmo a sua playlist</p>
+                  <p>Aproveite agora mesmo a sua playlist</p>
 
-                    <strong>3 episódios disponíveis</strong>
-                </div>
+                  <strong>3 episódios disponíveis</strong>
+              </div>
 
-                <Image 
-                    src="/white-logo.svg"
-                    alt=""
-                    width={354}
-                    height={96}
-                />
+              <Image 
+                  src="/white-logo.svg"
+                  alt=""
+                  width={354}
+                  height={96}
+              />
 
-                <div className="image-container" />
-            </Banner>
+              <div className="image-container" />
+          </Banner>
 
-            <EpisodesTableContainer>              
-              <Table episodes={tableData} />
-            </EpisodesTableContainer>
+          <EpisodesTableContainer>              
+            <Table episodes={tableData} />
+          </EpisodesTableContainer>
         </PlaylistWrapper>
       </PlaylistContainer>
     </DefaultLayout>

@@ -1,8 +1,8 @@
 import Image from "next/image"
-import { CalendarBlank, Clock, HandsClapping, Info, Users } from "phosphor-react"
+import { CalendarBlank, Clock, HandsClapping, Info, Play, Users } from "phosphor-react"
 import { PlayButton } from "../../components/PlayButton"
 import { DefaultLayout } from "../../layouts/DefaultLayout"
-import { EpisodeContainer, EpisodeHeading, EpisodeWrapper } from "../../styles/pages/episode"
+import { EpisodeContainer, EpisodeHeading, EpisodeWrapper, MobilePlayButton, MobilePlayButtonContainer } from "../../styles/pages/episode"
 
 function Episode() {
   return (
@@ -54,16 +54,22 @@ function Episode() {
                         <span>32</span>
                     </div>
                 </div>
-
-                <p className="content">
-                    Nesse episódio do Faladev, Diego Fernandes se reúne com João Pedro Schmitz, Bruno Lemos e Diego Haz, 
-                    para discutir sobre a importância da contribuição open source e quais desafios circulam na comunidade. 
-
-                    A gente passa a maior parte do tempo escrevendo código. Agora chegou o momento de falar sobre isso. 
-                    Toda semana reunimos profissionais da tecnologia para discutir sobre tudo que circula na órbita da programação. 
-                    O Faladev é um podcast original Rocketseat.
-                </p>
             </EpisodeHeading>
+
+            <p className="content">
+                Nesse episódio do Faladev, Diego Fernandes se reúne com João Pedro Schmitz, Bruno Lemos e Diego Haz, 
+                para discutir sobre a importância da contribuição open source e quais desafios circulam na comunidade. 
+
+                A gente passa a maior parte do tempo escrevendo código. Agora chegou o momento de falar sobre isso. 
+                Toda semana reunimos profissionais da tecnologia para discutir sobre tudo que circula na órbita da programação. 
+                O Faladev é um podcast original Rocketseat.
+            </p>
+
+            <MobilePlayButtonContainer isEpisodePlaying={false}>
+                <MobilePlayButton>
+                    <Play size={24} weight="fill" />
+                </MobilePlayButton>
+            </MobilePlayButtonContainer>
         </EpisodeWrapper>
       </EpisodeContainer>
     </DefaultLayout>

@@ -41,4 +41,23 @@ export const DiscoverWrapper = styled.div`
         flex-wrap: wrap;
         gap: 2.5rem;
     }
+
+    @media (max-width: 414px) {
+        max-width: 392px;
+        padding-left: 1rem; 
+        padding-right: 1rem; 
+        padding-bottom: 6.875rem;
+
+        header {
+            margin-top: 6.875rem;
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        ul {
+            justify-content: center;
+        }
+    }
 `

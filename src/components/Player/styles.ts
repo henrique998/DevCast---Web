@@ -2,7 +2,7 @@ import styled, { css } from "styled-components"
 import * as Slider from "@radix-ui/react-slider"
 
 export const PlayerContainer = styled.div`
-    max-width: 70rem;
+    max-width: 70.875rem;
     width: 100%;
 
     margin-left: 18.5rem;
@@ -13,7 +13,7 @@ export const PlayerContainer = styled.div`
 
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: 0.75rem;
 
     position: fixed;
     left: 1.875rem;
@@ -201,5 +201,14 @@ export const SecondaryControllButton = styled.button<SecondaryControllButtonProp
             }
         }
     `}
-
+    
+    ${props => !props.isActive && css`
+        transition: filter 0.2s;
+    
+        &:hover {
+            svg {
+                color: ${props => props.theme.purple};
+            }
+        }
+    `}
 `

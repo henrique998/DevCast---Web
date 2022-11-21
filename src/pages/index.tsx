@@ -1,6 +1,7 @@
+import { useState } from "react"
+import { GetServerSideProps } from "next"
 import Image from "next/image"
 import { Envelope, List } from "phosphor-react"
-import { useState } from "react"
 
 import { Button } from "../components/Button"
 import { ButtonLink } from "../components/ButtonLink"
@@ -14,8 +15,19 @@ import {
   TextsContainer, 
   UsersCountContainer 
 } from "../styles/pages/landing"
+import { api } from "../libs/axios"
 
-function Landing() {
+type Account = {
+  id: string
+  name: string
+  avatarUrl: string
+}
+
+interface LandingProps {
+  accounts: Account[]
+}
+
+function Landing({ accounts }: LandingProps) {
   const [isMenuMobileOpen, setIsMenuMobileOpen] = useState(false)
 
   function handleOpenMenuMobile() {
@@ -93,33 +105,15 @@ function Landing() {
 
           <UsersCountContainer>
             <div className="images">
-              <Image
-                src="/man.png"
-                alt=""
-                width={150}
-                height={150}
-              />
-
-              <Image
-                src="/man.png"
-                alt=""
-                width={150}
-                height={150}
-              />
-
-              <Image
-                src="/man.png"
-                alt=""
-                width={150}
-                height={150}
-              />
-
-              <Image
-                src="/man.png"
-                alt=""
-                width={150}
-                height={150}
-              />
+              {accounts?.map(account => (
+                <Image
+                  key={account.id}
+                  src={account.avatarUrl}
+                  alt={account.name}
+                  width={150}
+                  height={150}
+                />
+              ))}
             </div>
 
             <span>
@@ -146,3 +140,13 @@ function Landing() {
 }
 
 export default Landing
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const response = await api.get<Account[]>('/accounts/last-four')
+
+  return {
+    props: {
+      accounts: response.data
+    }
+  }
+} 

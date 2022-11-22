@@ -2,15 +2,32 @@ import Image from "next/image"
 import { CalendarBlank, Clock, HandsClapping, Info, Play, Users } from "phosphor-react"
 import { PlayButton } from "../../components/PlayButton"
 import { DefaultLayout } from "../../layouts/DefaultLayout"
+import { setupApiClient } from "../../services/api"
 import { EpisodeContainer, EpisodeHeading, EpisodeWrapper, MobilePlayButton, MobilePlayButtonContainer } from "../../styles/pages/episode"
+import { withSSRPrivate } from "../../utils/withSSRPrivate"
 
-function Episode() {
+type Episode = {
+    thumbnail: string
+    title: string
+    description: string
+    members: string
+    publishedAt: string
+    duration: number,
+    audioUrl: string
+    aplauses: number
+}
+
+interface EpisodeProps {
+    episode: Episode
+}
+
+function Episode({ episode }: EpisodeProps) {
   return (
     <DefaultLayout>
       <EpisodeContainer>
         <EpisodeWrapper>
             <Image 
-                src="/card-image.png"
+                src={episode?.thumbnail}
                 alt=""
                 width={930}
                 height={300}
@@ -18,7 +35,7 @@ function Episode() {
 
             <EpisodeHeading>
                 <div className="title-container">
-                    <h1>Como começar na programação em 2021 do jeito certo</h1>
+                    <h1>{episode?.title}</h1>
 
                     <PlayButton variant="outlined" label="Tocar" />
                 </div>
@@ -27,7 +44,7 @@ function Episode() {
                     <div className="info">
                         <Users size={24} weight="fill" />
 
-                        <span>Diego e Richard</span>
+                        <span>{episode?.members}</span>
                     </div>
 
                     <div className="bullet" />
@@ -35,7 +52,7 @@ function Episode() {
                     <div className="info">
                         <CalendarBlank size={24} weight="fill" />
 
-                        <span>8 Jan 21</span>
+                        <span>{episode?.publishedAt}</span>
                     </div>
 
                     <div className="bullet" />
@@ -43,7 +60,7 @@ function Episode() {
                     <div className="info">
                         <Clock size={24} weight="fill" />
 
-                        <span>35:40</span>
+                        <span>{episode?.duration}</span>
                     </div>
 
                     <div className="bullet" />
@@ -51,19 +68,15 @@ function Episode() {
                     <div className="info">
                         <HandsClapping size={24} weight="fill" />
 
-                        <span>32</span>
+                        <span>{episode?.aplauses}</span>
                     </div>
                 </div>
             </EpisodeHeading>
 
-            <p className="content">
-                Nesse episódio do Faladev, Diego Fernandes se reúne com João Pedro Schmitz, Bruno Lemos e Diego Haz, 
-                para discutir sobre a importância da contribuição open source e quais desafios circulam na comunidade. 
-
-                A gente passa a maior parte do tempo escrevendo código. Agora chegou o momento de falar sobre isso. 
-                Toda semana reunimos profissionais da tecnologia para discutir sobre tudo que circula na órbita da programação. 
-                O Faladev é um podcast original Rocketseat.
-            </p>
+            <div 
+                className="content" 
+                dangerouslySetInnerHTML={{ __html: episode?.description }}
+            />
 
             <MobilePlayButtonContainer isEpisodePlaying={false}>
                 <MobilePlayButton>
@@ -77,3 +90,17 @@ function Episode() {
 }
 
 export default Episode
+
+export const getServerSideProps = withSSRPrivate(async ctx => {
+    const slug = ctx.params.slug
+    
+    const apiClient = setupApiClient(ctx)
+
+    const response = await apiClient.get<Episode>(`/episodes/${slug}`)
+
+    return {
+        props: {
+            episode: response.data
+        }
+    }
+})

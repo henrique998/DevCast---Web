@@ -8,6 +8,12 @@ type SignInCredentials = {
    password: string
 }
 
+type SignUpCredentials = {
+   name: string
+   email: string
+   password: string
+}
+
 type Account = {
    id: string
    name: string
@@ -18,6 +24,7 @@ type Account = {
 type AuthContextData = {
    isUserAuthenticated: boolean
    signIn: (data: SignInCredentials) => Promise<void>
+   signUp: (data: SignUpCredentials) => Promise<void>
    signOut: () => void
    account: Account | undefined
 }
@@ -117,10 +124,25 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       }
    } 
 
+   async function signUp(data: SignUpCredentials) {
+      try {
+         await api.post('/accounts', {
+            name: data.name, 
+            email: data.email, 
+            password: data.password
+         })
+
+         Router.push('/sign-in')
+      } catch (error) {
+         alert(error.message)
+      }
+   }
+
    return (
       <AuthContext.Provider value={{
          isUserAuthenticated, 
          signIn,
+         signUp,
          account,
          signOut
       }}>

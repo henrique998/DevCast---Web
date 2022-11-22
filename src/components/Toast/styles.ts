@@ -1,7 +1,7 @@
 import * as Toast from "@radix-ui/react-toast"
 import styled from "styled-components"
 
-export const ToastContainer = styled(Toast.Root)`
+export const ToastContainer = styled.div`
     background-color: ${props => props.theme.gray300};
     border-radius: 6px;
     padding: 0 1.25rem;
@@ -24,13 +24,13 @@ export const ToastContainer = styled(Toast.Root)`
     }
 `
 
-export const ToastTitle = styled(Toast.Title)`
+export const ToastTitle = styled.h2`
     font-size: 1rem;
     font-weight: 500;
     line-height: 1.25rem;
 `
 
-export const ToastClose = styled(Toast.Action)`
+export const ToastCheck = styled.div`
     width: 1.25rem;
     height: 1.25rem;
     border-radius: 50%;
@@ -41,19 +41,10 @@ export const ToastClose = styled(Toast.Action)`
     justify-content: center;
 `
 
-export const ToastDescription = styled(Toast.Description)`
+export const ToastDescription = styled.p`
     margin-top: 0.5rem;
 
     font-size: 0.875rem;
 
     line-height: 0.875rem;
-`
-
-export const ToastViewport = styled(Toast.Viewport)`
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 100;
-
-    padding: 1.25rem;
 `

@@ -16,7 +16,7 @@ import {
 } from "./styles"
 
 export function Player() {
-   const isPlaying = false 
+   const isPlaying = true 
 
    return (
     <PlayerContainer isPlaying={isPlaying}>

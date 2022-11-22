@@ -6,7 +6,7 @@ import * as zod from "zod"
 
 import { Button } from "../components/Button"
 import { ButtonLink } from "../components/ButtonLink"
-import { DiscordLogo } from "../custom-icons/DiscordLogo"
+import { GithubLogo } from "../custom-icons/GithubLogo"
 import { Input } from "../components/Input"
 import { InputGroup } from "../components/InputGroup"
 import { Separator } from "../components/Separator"
@@ -50,48 +50,48 @@ function SignIn() {
     <SignInContainer>
       <LoginContainer>
         <header>
-            <h1>Login</h1>
+          <h1>Login</h1>
 
-            <p>
-                Entre e comece a ouvir as melhores conversas 
-                sobre javascript, node, typescript, etc.
-            </p>
+          <p>
+            Entre e comece a ouvir as melhores conversas 
+            sobre javascript, node, typescript, etc.
+          </p>
 
-            <ButtonLink 
-                label="Entrar com discord"
-                icon={<DiscordLogo />}
-                path={githubAuthUrl}
-            />
+          <ButtonLink 
+            label="Entrar com github"
+            icon={<GithubLogo />}
+            path={githubAuthUrl}
+          />
         </header>
 
         <Separator label="Ou" />
 
         <form onSubmit={handleSubmit(handleSignIn)}>
-            <InputGroup>
-                <label htmlFor="email">E-mail</label>
+          <InputGroup>
+              <label htmlFor="email">E-mail</label>
 
-                <Input 
-                  type="email"
-                  placeholder="jhondoe@email.com"
-                  id="email"
-                  error={emailInputError}
-                  {...register("email")}
-                />
-            </InputGroup>
+              <Input 
+                type="email"
+                placeholder="jhondoe@email.com"
+                id="email"
+                error={emailInputError}
+                {...register("email")}
+              />
+          </InputGroup>
 
-            <InputGroup>
-                <label htmlFor="password">Senha</label>
+          <InputGroup>
+              <label htmlFor="password">Senha</label>
 
-                <Input 
-                  type="password"
-                  placeholder="****************"
-                  id="password"
-                  error={passwordInputError}
-                  {...register("password")}
-                />
-            </InputGroup>
+              <Input 
+                type="password"
+                placeholder="****************"
+                id="password"
+                error={passwordInputError}
+                {...register("password")}
+              />
+          </InputGroup>
 
-            <Button label="Entrar" />
+          <Button label="Entrar" />
         </form>
 
         <Message>

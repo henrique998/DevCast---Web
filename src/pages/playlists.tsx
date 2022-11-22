@@ -1,6 +1,5 @@
 import { PlusCircle } from "phosphor-react"
 import * as Dialog from "@radix-ui/react-dialog"
-import * as ToastPrimitive from "@radix-ui/react-toast"
 import { PlaylistCard } from "../components/PlaylistCard"
 import { DefaultLayout } from "../layouts/DefaultLayout"
 import { 
@@ -10,12 +9,23 @@ import {
   ProfilePlaylistsContainer 
 } from "../styles/pages/playlists"
 import { ModalContent } from "../components/ModalContent"
-import { useState } from "react"
 import { Toast } from "../components/Toast"
+import { withSSRPrivate } from "../utils/withSSRPrivate"
+import { setupApiClient } from "../services/api"
 
-function Playlists() {
-  const [isToastOpen, setIsToastOpen] = useState(true)
+type Playlist = {
+  id: string
+  name: string
+  coverImage: string
+  slug: string
+  episodesCount: number
+}
 
+interface PlaylistsProps {
+  playlists: Playlist[]
+}
+
+function Playlists({ playlists }: PlaylistsProps) {
   return (
     <DefaultLayout>
       <PlaylistsContainer>
@@ -28,15 +38,6 @@ function Playlists() {
 
             <p>Guarde os seu episódios favoritos em playlists personalizadas</p>
           </header>
-
-          <ToastPrimitive.Provider>
-            <Toast 
-              isOpen={isToastOpen}
-              onOpenChange={setIsToastOpen}
-              title="Episódio adicionado"
-              description="Parabéns! você adicionou com sucesso este episódio a sua playlist"
-            />
-          </ToastPrimitive.Provider>
 
           <Dialog.Root>
             <Dialog.Trigger asChild>
@@ -54,13 +55,16 @@ function Playlists() {
             <h2>Suas playlists</h2>
 
             <ul>
-              <li>
-                <PlaylistCard 
-                  path="/playlist/01"
-                  thumbnailUrl="/card-image.png"
-                  name="HTML e Css"
-                />
-              </li>
+              {playlists?.map(playlist => (
+                <li key={playlist.id}>
+                  <PlaylistCard 
+                    path={playlist.slug}
+                    thumbnailUrl={playlist.coverImage}
+                    name={playlist.name}
+                    episodesCount={playlist.episodesCount}
+                  />
+                </li>
+              ))}
             </ul>
           </ProfilePlaylistsContainer>
         </PlaylistsWrapper> 
@@ -70,3 +74,15 @@ function Playlists() {
 }
 
 export default Playlists
+
+export const getServerSideProps = withSSRPrivate(async ctx => {
+  const apiClient = setupApiClient(ctx)
+
+  const response = await apiClient.get<Playlist[]>("/playlists")
+
+  return {
+    props: {
+      playlists: response.data
+    }
+  }
+})

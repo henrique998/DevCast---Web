@@ -8,9 +8,10 @@ interface PlaylistCardProps {
     thumbnailUrl: string
     thumbnailAlt?: string
     name: string
+    episodesCount: number
 }
 
-export function PlaylistCard({ path, thumbnailUrl, thumbnailAlt = "", name }: PlaylistCardProps) {
+export function PlaylistCard({ path, thumbnailUrl, thumbnailAlt = "", name, episodesCount }: PlaylistCardProps) {
     function handleClick(e: MouseEvent) {
         e.preventDefault()
 
@@ -18,7 +19,7 @@ export function PlaylistCard({ path, thumbnailUrl, thumbnailAlt = "", name }: Pl
     }
 
    return (
-    <PlaylistCardContainer href={path}>
+    <PlaylistCardContainer href={`/playlist/${path}`}>
         <div className="thumbnail-container">
             <Image 
                 src={thumbnailUrl}
@@ -29,8 +30,8 @@ export function PlaylistCard({ path, thumbnailUrl, thumbnailAlt = "", name }: Pl
 
             <div className="layer">
                 <span>
-                    31 <br />
-                    Episódios
+                    {episodesCount} <br />
+                    {episodesCount !== 1 ? 'Episódios' : 'Episódio'}
                 </span>
 
                 <div className="button-container">

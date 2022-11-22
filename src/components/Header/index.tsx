@@ -21,7 +21,7 @@ export function Header() {
       className="logo"
     />
 
-    <span>Olá henrique! vamos ouvir alguma coisa?</span>
+    <span>Olá {account?.name}! vamos ouvir alguma coisa?</span>
 
     <div>
       <SettingsLink href="/settings" isActive={isSettingsPage}>

@@ -50,7 +50,7 @@ export const AvatarFallback = styled(Avatar.Fallback)<AvatarProps>`
         width: 6.25rem;
         height: 6.25rem;
 
-        border: 1px solid red !important;
+        display: block;
     `}
 `
 

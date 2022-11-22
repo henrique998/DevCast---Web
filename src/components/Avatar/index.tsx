@@ -13,7 +13,7 @@ export function Avatar({ size = "sm", ...rest }: AvatarProps) {
 
       <AvatarFallback delayMs={600} size={size}>
         <div>
-          <User size={size === "sm" ? 24 : 32} />
+          <User size={size === "sm" ? 24 : 40} />
         </div>
       </AvatarFallback>
     </AvatarContainer>

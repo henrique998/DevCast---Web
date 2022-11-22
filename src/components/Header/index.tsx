@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { SlidersHorizontal } from "phosphor-react";
 import { useAuth } from "../../contexts/AuthContext";
-import { Avatar } from "./Avatar";
+import { Avatar } from "../Avatar";
 import { HeaderContainer, SettingsLink } from "./styles";
 
 export function Header() {

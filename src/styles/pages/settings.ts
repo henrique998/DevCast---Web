@@ -26,13 +26,6 @@ export const SettingsContainer = styled.section`
         align-items: center;
         gap: 1.25rem;
 
-        img {
-            width: 6.25rem;
-            height: 6.25rem;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
         label {
             cursor: pointer;
             height: 2.375rem;

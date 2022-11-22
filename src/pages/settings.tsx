@@ -15,19 +15,29 @@ import { api } from "../services/apiClient"
 import toast from "react-hot-toast"
 import { Toast } from "../components/Toast"
 import { useAuth } from "../contexts/AuthContext"
+import { Avatar } from "../components/Avatar"
 
 const updateProfileDataFormValidationSchema = zod.object({
-    email: zod.string().min(1, "Campo obrigatório").email("Digite um e-mail válido"),
-    password: zod.string().min(1, "Campo obrigatório")
+    name: zod.string(),
+    email: zod.string()
   })
   
 type UpdateProfileDataFormData = zod.infer<typeof updateProfileDataFormValidationSchema>
 
+interface IAxiosResponse {
+    name: string
+    email: string
+}
+
 function Settings() {
     const { account, setAccount } = useAuth()
 
-    const { register, handleSubmit, formState, reset } = useForm<UpdateProfileDataFormData>({
-        resolver: zodResolver(updateProfileDataFormValidationSchema)
+    const { register, handleSubmit } = useForm<UpdateProfileDataFormData>({
+        resolver: zodResolver(updateProfileDataFormValidationSchema),
+        defaultValues: {
+            name: account?.name,
+            email: account?.email
+        }
     })
 
     async function handleUpdateAvatar(e: ChangeEvent<HTMLInputElement>) {
@@ -68,67 +78,128 @@ function Settings() {
     }
 
     async function handleUpdateProfile(data: UpdateProfileDataFormData) {
-        console.log(data)
+        try {
+            const response = await api.put<IAxiosResponse>("/accounts/update", {
+                name: data.name.trim(),
+                email: data.email.trim(),
+            })
+
+            setAccount({
+                ...account,
+                name: response.data.name,
+                email: response.data.email
+            })
+
+            toast.custom(() => (
+                <Toast 
+                    title="Dados atualizados com sucesso"
+                    description=""
+                />
+            ), {
+                position: 'top-right'
+            })
+        } catch (error) {
+            toast.custom(() => (
+                <Toast 
+                    title="Error"
+                    description={error.message}
+                />
+            ), {
+                position: 'top-right'
+            })
+        }
+    }
+
+    async function handleDeleteAvatar() {
+        if (!account.avatarUrl) {
+            return;
+        }
+
+        try {
+            await api.delete("/accounts/delete/avatar")
+
+            setAccount({
+                ...account,
+                avatarUrl: null
+            })
+
+            toast.custom(() => (
+                <Toast 
+                    title="Avatar deletado com sucesso"
+                    description=""
+                />
+            ), {
+                position: 'top-right'
+            })
+        } catch (error) {
+            toast.custom(() => (
+                <Toast 
+                    title="Error"
+                    description={error.message}
+                />
+            ), {
+                position: 'top-right'
+            })
+        }
     }
 
     return (
         <DefaultLayout>
-        <SettingsContainer>
-            <h1>
-                <strong>Edite</strong> suas informações pessoais <br /> 
-                caso deseje
-            </h1>
+            <SettingsContainer>
+                <h1>
+                    <strong>Edite</strong> suas informações pessoais <br /> 
+                    caso deseje
+                </h1>
 
-            <div>
-                <Image 
-                    src={account?.avatarUrl ?? ""}
-                    alt="sua foto de avatar"
-                    width={300} 
-                    height={300} 
-                />
-
-                <input 
-                    type="file" 
-                    id="image" 
-                    hidden 
-                    onChange={handleUpdateAvatar}
-                />
-
-                <label htmlFor="image">Enviar nova imagem</label>
-
-                <button>Excluir</button>
-            </div>
-
-            <Form onSubmit={handleSubmit(handleUpdateProfile)}>
-                <InputGroup>
-                    <label htmlFor="name">
-                        Nome<strong>*</strong>
-                    </label>
-
-                    <Input 
-                        id="name"
-                        type="text" 
-                        placeholder="Jhon doe" 
-                        value="Henrique" 
+                <div>
+                    <Avatar 
+                        src={account?.avatarUrl ?? ""}
+                        alt="sua foto de avatar"
+                        size="md"
                     />
-                </InputGroup>
 
-                <InputGroup>
-                    <label htmlFor="email">
-                        E-mail<strong>*</strong>
-                    </label>
-
-                    <Input 
-                        id="email"
-                        type="email" 
-                        placeholder="Jjhondoe@email.com" 
-                        value="henriquemonteiro037@gmail.com" 
+                    <input 
+                        type="file" 
+                        id="image" 
+                        hidden 
+                        onChange={handleUpdateAvatar}
                     />
-                </InputGroup>
 
-                <Button label="Atualizar" />
-            </Form>
-        </SettingsContainer>
+                    <label htmlFor="image">Enviar nova imagem</label>
+
+                    <button onClick={handleDeleteAvatar}>Excluir</button>
+                </div>
+
+                <Form onSubmit={handleSubmit(handleUpdateProfile)}>
+                    <InputGroup>
+                        <label htmlFor="name">
+                            Nome<strong>*</strong>
+                        </label>
+
+                        <Input 
+                            id="name"
+                            type="text" 
+                            placeholder="Jhon doe" 
+                            {...register('name')}
+                        />
+                    </InputGroup>
+
+                    <InputGroup>
+                        <label htmlFor="email">
+                            E-mail<strong>*</strong>
+                        </label>
+
+                        <Input 
+                            id="email"
+                            type="email" 
+                            placeholder="Jjhondoe@email.com" 
+                            {...register('email')}
+                        />
+                    </InputGroup>
+
+                    <Button label="Atualizar" />
+                </Form>
+            </SettingsContainer>
         </DefaultLayout>
     )
 }

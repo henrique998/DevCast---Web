@@ -27,6 +27,7 @@ type AuthContextData = {
    signUp: (data: SignUpCredentials) => Promise<void>
    signOut: () => void
    account: Account | undefined
+   setAccount: (data: Account) => void
 }
 
 interface AuthContextProviderProps {
@@ -144,6 +145,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
          signIn,
          signUp,
          account,
+         setAccount,
          signOut
       }}>
          {children}

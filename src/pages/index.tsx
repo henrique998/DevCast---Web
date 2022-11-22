@@ -147,6 +147,8 @@ export const getServerSideProps = withSSRGuest(async ctx => {
   const response = await apiClient.get<Account[]>('/accounts/last-four')
 
   return {
-    props: {}
+    props: {
+      accounts: response.data
+    }
   }
 })

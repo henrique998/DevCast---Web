@@ -16,8 +16,27 @@ import {
 } from "../styles/pages/home"
 
 import { tableData } from "../utils/table.data"
+import { withSSRPrivate } from "../utils/withSSRPrivate"
+import { setupApiClient } from "../services/api"
 
-function Home() {
+type Episode = {
+  id: string
+  thumbnail: string
+  title: string
+  members: string
+  publishedAt: string
+  duration: number
+  likes: number
+  slug: string
+  url: string
+  type: string
+}
+
+interface HomeProps {
+  episodes: any[]
+}
+
+function Home({ episodes }: HomeProps) {
   return (
     <DefaultLayout>
       <HomeContainer>
@@ -136,7 +155,7 @@ function Home() {
           <AllRealeasesTableContainer>
             <h2>Todos os lançamentos</h2>
              
-            <Table episodes={tableData} />
+            <Table episodes={episodes} />
           </AllRealeasesTableContainer>
 
           <Player />
@@ -147,3 +166,30 @@ function Home() {
 }
 
 export default Home
+
+export const getServerSideProps = withSSRPrivate(async ctx => {
+  const apiClient = setupApiClient(ctx)
+
+  const response = await apiClient.get<Episode[]>("/episodes")
+
+  const episodes = response.data.map(episode => {
+    return {
+      id: episode.id,
+      imageAndTitle: {
+        imgUrl: episode.thumbnail,
+        title: episode.title,
+      },
+      slug: episode.slug,
+      members: episode.members,
+      publishedAt: episode.publishedAt,
+      duration: episode.duration.toString(),
+      aplauses: episode.likes
+    }
+  })
+  
+  return {
+    props: {
+      episodes
+    }
+  }
+})

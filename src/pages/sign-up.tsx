@@ -1,7 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Button } from "../components/Button"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as zod from "zod"
 
+import { Button } from "../components/Button"
 import { ButtonLink } from "../components/ButtonLink"
 import { DiscordLogo } from "../custom-icons/DiscordLogo"
 import { Input } from "../components/Input"
@@ -14,8 +17,31 @@ import {
   Message, 
   SignUpContainer 
 } from "../styles/pages/sign-up"
+import { githubAuthUrl } from "../utils/githubAuthUrl"
+
+const signUpFormValidationSchema = zod.object({
+  name: zod.string().min(1, "Campo obrigatório"),
+  email: zod.string().min(1, "Campo obrigatório").email("Digite um e-mail válido"),
+  password: zod.string().min(1, "Campo obrigatório")
+})
+
+type SignUpFormData = zod.infer<typeof signUpFormValidationSchema>
 
 function SignUp() {
+  const { register, handleSubmit, formState } = useForm<SignUpFormData>({
+    resolver: zodResolver(signUpFormValidationSchema)
+  })
+
+  async function handleSignUp(data: SignUpFormData) {
+    console.log(data)
+  }
+
+  const { errors } = formState
+
+  const nameInputError = errors.name?.message
+  const emailInputError = errors.email?.message
+  const passwordInputError = errors.password?.message
+
   return (
     <SignUpContainer>
       <BrandContainer>
@@ -42,13 +68,13 @@ function SignUp() {
             <ButtonLink 
                 label="Criar conta com discord"
                 icon={<DiscordLogo />}
-                path="/sjdjshdjshdjshd"
+                path={githubAuthUrl}
             />
         </header>
 
         <Separator label="Ou" />
 
-        <form>
+        <form onSubmit={handleSubmit(handleSignUp)}>
             <InputGroup>
                 <label htmlFor="name">Nome</label>
 
@@ -56,6 +82,8 @@ function SignUp() {
                   type="text"
                   placeholder="Jhon doe"
                   id="name"
+                  error={nameInputError}
+                  {...register("name")}
                 />
             </InputGroup>
 
@@ -66,6 +94,8 @@ function SignUp() {
                   type="email"
                   placeholder="jhondoe@email.com"
                   id="email"
+                  error={emailInputError}
+                  {...register("email")}
                 />
             </InputGroup>
 
@@ -75,7 +105,9 @@ function SignUp() {
                 <Input 
                   type="password"
                   placeholder="****************"
-                  id="email"
+                  id="password"
+                  error={passwordInputError}
+                  {...register("password")}
                 />
             </InputGroup>
 

@@ -32,7 +32,7 @@ export function Table({ episodes }: TableProps) {
             <th>Aplausos</th>
             <th></th>
         </thead>
-        {episodes.map(episode => (
+        {episodes?.map(episode => (
             <tr key={episode.id}>
                 <td>
                     <Image 

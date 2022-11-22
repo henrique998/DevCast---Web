@@ -1,6 +1,5 @@
 import Image from "next/image"
 import { HandsClapping, Pause, Play, Queue, Repeat, Shuffle, SkipBack, SkipForward, Star } from "phosphor-react"
-import { useState } from "react"
 
 import { 
     PrimaryButtonsContainer, 
@@ -17,10 +16,10 @@ import {
 } from "./styles"
 
 export function Player() {
-   const isPlaying = true 
+   const isPlaying = false 
 
    return (
-    <PlayerContainer>
+    <PlayerContainer isPlaying={isPlaying}>
         <EpisodeDetailsContainer>
             <Image 
                 src="/card-image.png"

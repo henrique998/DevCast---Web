@@ -1,0 +1,1 @@
+export const githubAuthUrl = "https://github.com/login/oauth/authorize?client_id=81c853858d05811fb5c8"

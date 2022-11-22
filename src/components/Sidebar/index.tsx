@@ -1,10 +1,13 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Compass, House, Power, Queue, Star } from "phosphor-react";
+import { useAuth } from "../../contexts/AuthContext";
 import { NavLink } from "./NavLink";
 import { LoggoutButton, SidebarContainer } from "./styles";
 
 export function Sidebar() {
+  const { signOut } = useAuth()
+
   const router = useRouter()
   const isSettingsPage = router.pathname === "/settings"
 
@@ -54,7 +57,7 @@ export function Sidebar() {
           </ul>
         </nav>
 
-        <LoggoutButton>
+        <LoggoutButton onClick={signOut}>
           <Power size={24} weight="bold" />
 
           <span>Sair</span>

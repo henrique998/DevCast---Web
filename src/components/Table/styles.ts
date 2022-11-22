@@ -49,6 +49,7 @@ export const TableContainer = styled.table`
 
         &:nth-child(2) {
             span {
+                display: block;
                 max-width: 10.375rem;
                 width: 100%;
 

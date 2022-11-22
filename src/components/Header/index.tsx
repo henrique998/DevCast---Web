@@ -1,10 +1,13 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { SlidersHorizontal } from "phosphor-react";
+import { useAuth } from "../../contexts/AuthContext";
 import { Avatar } from "./Avatar";
 import { HeaderContainer, SettingsLink } from "./styles";
 
 export function Header() {
+  const { account } = useAuth()
+
   const router = useRouter()
   const isSettingsPage = router.pathname === "/settings" 
 
@@ -29,8 +32,8 @@ export function Header() {
       </SettingsLink>
 
       <Avatar 
-        src="/man.png"
-        alt=""
+        src={account?.avatarUrl}
+        alt={account?.avatarUrl ? "Sua foto" : "Ícone de um usuário"}
       />
     </div>
   </HeaderContainer>

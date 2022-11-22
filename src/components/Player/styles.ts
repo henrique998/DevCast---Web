@@ -1,7 +1,11 @@
 import styled, { css } from "styled-components"
 import * as Slider from "@radix-ui/react-slider"
 
-export const PlayerContainer = styled.div`
+interface PlayerContainerProps {
+    isPlaying: boolean
+}
+
+export const PlayerContainer = styled.div<PlayerContainerProps>`
     max-width: 70.875rem;
     width: 100%;
 
@@ -17,7 +21,7 @@ export const PlayerContainer = styled.div`
 
     position: fixed;
     left: 1.875rem;
-    bottom: 1.875rem;
+    bottom: ${props => props.isPlaying ? '1.875rem' : '-100%'};
     right: 1.875rem;
     z-index: 100;
 

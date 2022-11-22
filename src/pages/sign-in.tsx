@@ -1,15 +1,51 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Button } from "../components/Button"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as zod from "zod"
 
+import { Button } from "../components/Button"
 import { ButtonLink } from "../components/ButtonLink"
 import { DiscordLogo } from "../custom-icons/DiscordLogo"
 import { Input } from "../components/Input"
 import { InputGroup } from "../components/InputGroup"
 import { Separator } from "../components/Separator"
-import { BrandContainer, CopyrightMessage, LoginContainer, Message, SignInContainer } from "../styles/pages/sign-in"
+
+import { 
+  BrandContainer, 
+  CopyrightMessage, 
+  LoginContainer, 
+  Message, 
+  SignInContainer 
+} from "../styles/pages/sign-in"
+import { useAuth } from "../contexts/AuthContext"
+import { githubAuthUrl } from "../utils/githubAuthUrl"
+
+const signInFormValidationSchema = zod.object({
+  email: zod.string().min(1, "Campo obrigatório").email("Digite um e-mail válido"),
+  password: zod.string().min(1, "Campo obrigatório")
+})
+
+type SignInFormData = zod.infer<typeof signInFormValidationSchema>
 
 function SignIn() {
+  const { signIn } = useAuth()
+
+  const { register, handleSubmit, formState, reset } = useForm<SignInFormData>({
+    resolver: zodResolver(signInFormValidationSchema)
+  })
+
+  async function handleSignIn(data: SignInFormData) {
+    await signIn(data)
+
+    reset()
+  }
+
+  const { errors } = formState
+
+  const emailInputError = errors.email?.message
+  const passwordInputError = errors.password?.message
+
   return (
     <SignInContainer>
       <LoginContainer>
@@ -24,13 +60,13 @@ function SignIn() {
             <ButtonLink 
                 label="Entrar com discord"
                 icon={<DiscordLogo />}
-                path="/sjdjshdjshdjshd"
+                path={githubAuthUrl}
             />
         </header>
 
         <Separator label="Ou" />
 
-        <form>
+        <form onSubmit={handleSubmit(handleSignIn)}>
             <InputGroup>
                 <label htmlFor="email">E-mail</label>
 
@@ -38,6 +74,8 @@ function SignIn() {
                   type="email"
                   placeholder="jhondoe@email.com"
                   id="email"
+                  error={emailInputError}
+                  {...register("email")}
                 />
             </InputGroup>
 
@@ -47,7 +85,9 @@ function SignIn() {
                 <Input 
                   type="password"
                   placeholder="****************"
-                  id="email"
+                  id="password"
+                  error={passwordInputError}
+                  {...register("password")}
                 />
             </InputGroup>
 

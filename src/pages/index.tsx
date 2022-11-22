@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { GetServerSideProps } from "next"
 import Image from "next/image"
 import { Envelope, List } from "phosphor-react"
 
@@ -15,7 +14,8 @@ import {
   TextsContainer, 
   UsersCountContainer 
 } from "../styles/pages/landing"
-import { api } from "../libs/axios"
+import { withSSRGuest } from "../utils/withSSRGuest"
+import { setupApiClient } from "../services/api"
 
 type Account = {
   id: string
@@ -141,12 +141,12 @@ function Landing({ accounts }: LandingProps) {
 
 export default Landing
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const response = await api.get<Account[]>('/accounts/last-four')
+export const getServerSideProps = withSSRGuest(async ctx => {
+  const apiClient = setupApiClient(ctx)
+
+  const response = await apiClient.get<Account[]>('/accounts/last-four')
 
   return {
-    props: {
-      accounts: response.data
-    }
+    props: {}
   }
-} 
+})

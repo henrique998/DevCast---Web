@@ -1,7 +1,8 @@
 import Image from "next/image"
+import { Queue } from "phosphor-react"
 import { MouseEvent } from "react"
 import { PlayButton } from "../PlayButton"
-import { PlaylistCardContainer } from "./styles"
+import { EmptyThumbnail, PlaylistCardContainer } from "./styles"
 
 interface PlaylistCardProps {
     path: string
@@ -21,12 +22,18 @@ export function PlaylistCard({ path, thumbnailUrl, thumbnailAlt = "", name, epis
    return (
     <PlaylistCardContainer href={`/playlist/${path}`}>
         <div className="thumbnail-container">
-            <Image 
-                src={thumbnailUrl}
-                alt={thumbnailAlt}
-                width={600}
-                height={600}
-            />
+            {thumbnailUrl ? (
+                <Image 
+                    src={thumbnailUrl}
+                    alt={thumbnailAlt}
+                    width={600}
+                    height={600}
+                />
+            ) : (
+                <EmptyThumbnail>
+                    <Queue size={46} weight="fill" />
+                </EmptyThumbnail>
+            )}
 
             <div className="layer">
                 <span>

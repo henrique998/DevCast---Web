@@ -29,9 +29,11 @@ import { Toast } from "../Toast"
 import { ChangeEvent, useState } from "react"
 import { SelectedThumbnail } from "../SelectedThumbnail"
 import { api } from "../../services/apiClient"
+import { Playlist } from "../../pages/playlists"
 
 interface ModalContentProps {
     hasPlaylistsCarroussel?: boolean
+    onCreate: (playlist: Playlist) => void
 }
 
 const createNewPlaylistFormValidationSchema = zod.object({
@@ -41,7 +43,7 @@ const createNewPlaylistFormValidationSchema = zod.object({
   
 type CreateNewPlaylistFormData = zod.infer<typeof createNewPlaylistFormValidationSchema>
 
-export function ModalContent({ hasPlaylistsCarroussel = true }: ModalContentProps) {
+export function ModalContent({ hasPlaylistsCarroussel = true, onCreate }: ModalContentProps) {
     const [image, setImage] = useState<File | null>(null)
     const [previewThumbnail, setPreviewThumbnail] = useState('')
 
@@ -76,15 +78,18 @@ export function ModalContent({ hasPlaylistsCarroussel = true }: ModalContentProp
         formData.append("coverImage", image)
 
         try {
-            await api.post("/playlists", formData)
+            const response = await api.post("/playlists", formData)
+
+            onCreate(response.data)
             
             reset()
+
             handleResetThumbnail()
     
             toast.custom(() => (
                 <Toast 
-                    title="Episódio adicionado"
-                    description="Parabéns! você adicionou com sucesso este episódio a sua playlist"
+                    title="Playlist criada com sucesso"
+                    description="Parabéns! você criou uma playlist e já pode adicionar episódios"
                 />
             ), {
                 position: 'top-right'

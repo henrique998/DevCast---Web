@@ -17,7 +17,7 @@ export const ButtonContainer = styled.button<ButtonContainerProps>`
 
         transition: filter 0.2s;
 
-        &:hover {
+        &:not(:disabled):hover {
             filter: brightness(0.9);
         }
     `}
@@ -29,9 +29,15 @@ export const ButtonContainer = styled.button<ButtonContainerProps>`
 
         transition: background-color 0.2s;
 
-        &:hover {
+        &:not(:disabled):hover {
             background-color: ${props => props.theme.purple};
             color: ${props => props.theme.gray100};
         }
     `}
+
+    transition: opacity 0.2s;
+
+    &:disabled {
+        opacity: 0.85;
+    }
 `

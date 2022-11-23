@@ -61,3 +61,31 @@ export const FavoritesWrapper = styled.div`
         }
     }
 `
+
+export const EmptyFavoritesEpisodesContainer = styled.div`
+    margin-top: 5rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    svg {
+        color: ${props => props.theme.gray300};
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+
+        color: ${props => props.theme.gray600};
+    }
+
+    p {
+        font-size: 1rem;
+        font-weight: 500;
+
+        color: ${props => props.theme.gray600};
+    }
+`

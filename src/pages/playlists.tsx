@@ -1,19 +1,20 @@
-import { PlusCircle } from "phosphor-react"
+import { PlusCircle, Queue } from "phosphor-react"
 import * as Dialog from "@radix-ui/react-dialog"
 import { PlaylistCard } from "../components/PlaylistCard"
 import { DefaultLayout } from "../layouts/DefaultLayout"
 import { 
   AddButton, 
+  EmptyPlaylistsContainer, 
   PlaylistsContainer, 
   PlaylistsWrapper, 
   ProfilePlaylistsContainer 
 } from "../styles/pages/playlists"
 import { ModalContent } from "../components/ModalContent"
-import { Toast } from "../components/Toast"
 import { withSSRPrivate } from "../utils/withSSRPrivate"
 import { setupApiClient } from "../services/api"
+import { useState } from "react"
 
-type Playlist = {
+export type Playlist = {
   id: string
   name: string
   coverImage: string
@@ -22,10 +23,16 @@ type Playlist = {
 }
 
 interface PlaylistsProps {
-  playlists: Playlist[]
+  playlistsData: Playlist[]
 }
 
-function Playlists({ playlists }: PlaylistsProps) {
+function Playlists({ playlistsData }: PlaylistsProps) {
+  const [playlists, setPlaylists] = useState<Playlist[]>(playlistsData)
+
+  function handleUpdateListOfPlaylists(playlist: Playlist) {
+    setPlaylists(data => [playlist, ...data])
+  }
+
   return (
     <DefaultLayout>
       <PlaylistsContainer>
@@ -48,25 +55,38 @@ function Playlists({ playlists }: PlaylistsProps) {
               </AddButton>
             </Dialog.Trigger>
 
-            <ModalContent hasPlaylistsCarroussel={false} />
+            <ModalContent 
+              hasPlaylistsCarroussel={false} 
+              onCreate={handleUpdateListOfPlaylists}
+            />
           </Dialog.Root>
 
-          <ProfilePlaylistsContainer>
-            <h2>Suas playlists</h2>
+          {playlists?.length > 0 ? (
+            <ProfilePlaylistsContainer>
+              <h2>Suas playlists</h2>
 
-            <ul>
-              {playlists?.map(playlist => (
-                <li key={playlist.id}>
-                  <PlaylistCard 
-                    path={playlist.slug}
-                    thumbnailUrl={playlist.coverImage}
-                    name={playlist.name}
-                    episodesCount={playlist.episodesCount}
-                  />
-                </li>
-              ))}
-            </ul>
-          </ProfilePlaylistsContainer>
+              <ul>
+                {playlists?.map(playlist => (
+                  <li key={playlist.id}>
+                    <PlaylistCard 
+                      path={playlist.slug}
+                      thumbnailUrl={playlist.coverImage}
+                      name={playlist.name}
+                      episodesCount={playlist.episodesCount}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </ProfilePlaylistsContainer>
+          ) : (
+            <EmptyPlaylistsContainer>
+              <Queue size={64} weight="fill" />
+
+              <h2>Você ainda não criou nenhuma playlist.</h2>
+
+              <p>Crie playlists para organizar os seus episódios separando por assunto.</p>
+            </EmptyPlaylistsContainer>
+          )}
         </PlaylistsWrapper> 
       </PlaylistsContainer>
     </DefaultLayout>
@@ -82,7 +102,7 @@ export const getServerSideProps = withSSRPrivate(async ctx => {
 
   return {
     props: {
-      playlists: response.data
+      playlistsData: response.data
     }
   }
 })

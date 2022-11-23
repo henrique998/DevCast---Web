@@ -10,7 +10,7 @@ import { InputGroup } from "../components/InputGroup"
 import { DefaultLayout } from "../layouts/DefaultLayout"
 
 import { Form, SettingsContainer } from "../styles/pages/settings"
-import { ChangeEvent } from "react"
+import { ChangeEvent, useState } from "react"
 import { api } from "../services/apiClient"
 import toast from "react-hot-toast"
 import { Toast } from "../components/Toast"
@@ -31,6 +31,7 @@ interface IAxiosResponse {
 
 function Settings() {
     const { account, setAccount } = useAuth()
+    const [isLoading, setIsLoading] = useState(false)
 
     const { register, handleSubmit } = useForm<UpdateProfileDataFormData>({
         resolver: zodResolver(updateProfileDataFormValidationSchema),
@@ -79,6 +80,8 @@ function Settings() {
 
     async function handleUpdateProfile(data: UpdateProfileDataFormData) {
         try {
+            setIsLoading(true)
+
             const response = await api.put<IAxiosResponse>("/accounts/update", {
                 name: data.name.trim(),
                 email: data.email.trim(),
@@ -107,6 +110,8 @@ function Settings() {
             ), {
                 position: 'top-right'
             })
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -126,7 +131,7 @@ function Settings() {
             toast.custom(() => (
                 <Toast 
                     title="Avatar deletado com sucesso"
-                    description=""
+                    description="Não se preocupe. você pode adicionar outra foto mais tarde!"
                 />
             ), {
                 position: 'top-right'
@@ -197,7 +202,7 @@ function Settings() {
                         />
                     </InputGroup>
 
-                    <Button label="Atualizar" />
+                    <Button label="Atualizar" disabled={isLoading} />
                 </Form>
             </SettingsContainer>
         </DefaultLayout>

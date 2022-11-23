@@ -1,8 +1,26 @@
 import { EpisodeCard } from "../components/EpisodeCard"
 import { DefaultLayout } from "../layouts/DefaultLayout"
+import { setupApiClient } from "../services/api"
 import { DiscoverContainer, DiscoverWrapper } from "../styles/pages/discover"
+import { withSSRPrivate } from "../utils/withSSRPrivate"
 
-function Discover() {
+type Episode = {
+  id: string
+  thumbnail: string
+  title: string
+  members: string
+  publishedAt: string
+  duration: string
+  slug: string
+  url: string
+  type: string
+}
+
+interface DiscoverProps {
+  episodes: Episode[]
+}
+
+function Discover({ episodes }: DiscoverProps) {
   return (
     <DefaultLayout>
       <DiscoverContainer>
@@ -17,93 +35,18 @@ function Discover() {
             </header>
 
             <ul>
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
+              {episodes?.map(episode => (
+                <li key={episode.id}>
+                  <EpisodeCard 
+                    path={`/episode/${episode.slug}`}
+                    imageUrl={episode.thumbnail}
+                    duration={episode.duration}
+                    title={episode.title}
+                    members={episode.members}
+                    publishedAt={episode.publishedAt}
+                  />
                 </li>
-
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
-
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
-
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
-
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
-
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
-
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
-
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
+              ))}
             </ul>
         </DiscoverWrapper>
       </DiscoverContainer>
@@ -112,3 +55,27 @@ function Discover() {
 }
 
 export default Discover
+
+export const getServerSideProps = withSSRPrivate(async ctx => {
+  const apiClient = setupApiClient(ctx)
+
+  const response = await apiClient.get<Episode[]>("/episodes")
+
+  const episodes = response.data.map(episode => {
+    return {
+      id: episode.id,
+      title: episode.title,
+      thumbnail: episode.thumbnail,
+      slug: episode.slug,
+      members: episode.members,
+      publishedAt: episode.publishedAt,
+      duration: episode.duration.toString(),
+    }
+  })
+  
+  return {
+    props: {
+      episodes
+    }
+  }
+})

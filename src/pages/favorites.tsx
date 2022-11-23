@@ -1,8 +1,27 @@
+import { MicrophoneSlash } from "phosphor-react"
 import { EpisodeCard } from "../components/EpisodeCard"
 import { DefaultLayout } from "../layouts/DefaultLayout"
-import { FavoritesContainer, FavoritesWrapper } from "../styles/pages/favorites"
+import { setupApiClient } from "../services/api"
+import { EmptyFavoritesEpisodesContainer, FavoritesContainer, FavoritesWrapper } from "../styles/pages/favorites"
+import { withSSRPrivate } from "../utils/withSSRPrivate"
 
-function Favorites() {
+type Episode = {
+    id: string
+    thumbnail: string
+    title: string
+    members: string
+    publishedAt: string
+    duration: string
+    slug: string
+    url: string
+    type: string
+}
+  
+interface FavoritesProps {
+    episodes: Episode[]
+}
+
+function Favorites({ episodes }: FavoritesProps) {
   return (
     <DefaultLayout>
       <FavoritesContainer>
@@ -16,95 +35,30 @@ function Favorites() {
                 <p>Aqui você pode acessar todos os episódios que você mais gostou</p>
             </header>
 
-            <ul>
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
+            {episodes?.length > 0 ? (
+                <ul>
+                    {episodes?.map(episode => (
+                        <li key={episode.id}>
+                            <EpisodeCard 
+                                path={`/episode/${episode.slug}`}
+                                imageUrl={episode.thumbnail}
+                                duration={episode.duration}
+                                title={episode.title}
+                                members={episode.members}
+                                publishedAt={episode.publishedAt}
+                            />
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <EmptyFavoritesEpisodesContainer>
+                    <MicrophoneSlash size={64} weight="fill" />
 
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
+                    <h2>Você ainda não possui episódios favoritos.</h2>
 
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
-
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
-
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
-
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
-
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
-
-                <li>
-                    <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                    />
-                </li>
-            </ul>
+                    <p>Adicione os episódios que você mais gostou para ouvi-los mais tarde.</p>
+                </EmptyFavoritesEpisodesContainer>
+            )}
         </FavoritesWrapper>
       </FavoritesContainer>
     </DefaultLayout>
@@ -112,3 +66,27 @@ function Favorites() {
 }
 
 export default Favorites
+
+export const getServerSideProps = withSSRPrivate(async ctx => {
+    const apiClient = setupApiClient(ctx)
+  
+    const response = await apiClient.get<Episode[]>("/favorites-episodes")
+
+    const episodes = response.data.map(episode => {
+        return {
+            id: episode.id,
+            title: episode.title,
+            thumbnail: episode.thumbnail,
+            slug: episode.slug,
+            members: episode.members,
+            publishedAt: episode.publishedAt,
+            duration: episode.duration.toString(),
+        }
+    })
+  
+    return {
+      props: {
+        episodes
+      }
+    }
+})

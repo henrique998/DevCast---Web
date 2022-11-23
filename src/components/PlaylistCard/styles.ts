@@ -84,3 +84,18 @@ export const PlaylistCardContainer = styled(Link)`
         }
     }
 `
+
+export const EmptyThumbnail = styled.div`
+    width: 12.5rem;
+    height: 12.5rem;
+    border-radius: 8px;
+    background-color: ${props => props.theme.gray300};
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+        color: ${props => props.theme.gray600};
+    }
+`

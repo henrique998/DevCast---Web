@@ -17,6 +17,7 @@
     "@radix-ui/react-slider": "^1.1.0",
     "@radix-ui/react-toast": "^1.1.2",
     "axios": "0.27.2",
+    "date-fns": "^2.29.3",
     "next": "13.0.3",
     "nookies": "^2.5.2",
     "phosphor-react": "^1.4.1",
@@ -29,6 +30,7 @@
     "zod": "^3.19.1"
   },
   "devDependencies": {
+    "@types/date-fns": "^2.6.0",
     "@types/node": "18.7.23",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",

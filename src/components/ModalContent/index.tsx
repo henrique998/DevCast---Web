@@ -30,6 +30,7 @@ import { ChangeEvent, useState } from "react"
 import { SelectedThumbnail } from "../SelectedThumbnail"
 import { api } from "../../services/apiClient"
 import { Playlist } from "../../pages/playlists"
+import { usePlaylists } from "../../contexts/PlaylistContext"
 
 interface ModalContentProps {
     hasPlaylistsCarroussel?: boolean
@@ -46,6 +47,8 @@ type CreateNewPlaylistFormData = zod.infer<typeof createNewPlaylistFormValidatio
 export function ModalContent({ hasPlaylistsCarroussel = true, onCreate }: ModalContentProps) {
     const [image, setImage] = useState<File | null>(null)
     const [previewThumbnail, setPreviewThumbnail] = useState('')
+
+    const { playlists } = usePlaylists()
 
     const { register, handleSubmit, formState, reset } = useForm<CreateNewPlaylistFormData>({
         resolver: zodResolver(createNewPlaylistFormValidationSchema)
@@ -124,47 +127,17 @@ export function ModalContent({ hasPlaylistsCarroussel = true, onCreate }: ModalC
                                         slidesPerView={5}
                                         spaceBetween={20}
                                     >
-                                        <SwiperSlide>
-                                            <li>
-                                                <PlaylistMiniCard value="01" />
-                                            </li>
-                                        </SwiperSlide>
-
-                                        <SwiperSlide>
-                                            <li>
-                                                <PlaylistMiniCard value="02" />
-                                            </li>
-                                        </SwiperSlide>
-
-                                        <SwiperSlide>
-                                            <li>
-                                                <PlaylistMiniCard value="03" />
-                                            </li>
-                                        </SwiperSlide>
-
-                                        <SwiperSlide>
-                                            <li>
-                                                <PlaylistMiniCard value="04" />
-                                            </li>
-                                        </SwiperSlide>
-
-                                        <SwiperSlide>
-                                            <li>
-                                                <PlaylistMiniCard value="05" />
-                                            </li>
-                                        </SwiperSlide>
-
-                                        <SwiperSlide>
-                                            <li>
-                                                <PlaylistMiniCard value="06" />
-                                            </li>
-                                        </SwiperSlide>
-
-                                        <SwiperSlide>
-                                            <li>
-                                                <PlaylistMiniCard value="07" />
-                                            </li>
-                                        </SwiperSlide>
+                                        {playlists?.map(playlist => (
+                                            <SwiperSlide key={playlist.id}>
+                                                <li>
+                                                    <PlaylistMiniCard 
+                                                        value={playlist.id}
+                                                        thumbnail={playlist.coverImage} 
+                                                        title={playlist.name}
+                                                    />
+                                                </li>
+                                            </SwiperSlide>
+                                        ))}
                                     </Swiper>
                                 </RadioGroup.Root>
 

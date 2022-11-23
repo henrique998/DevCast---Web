@@ -4,17 +4,23 @@ import { Toaster } from 'react-hot-toast'
 import { AuthContextProvider } from '../contexts/AuthContext'
 import { GlobalStyle } from '../styles/global'
 import { defaultTheme } from '../styles/themes/default'
+import { PlaylistContextProvider } from '../contexts/PlaylistContext'
+import { PlayerContextProvider } from '../contexts/PlayerContext'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthContextProvider>
-      <ThemeProvider theme={defaultTheme}>
-        <Component {...pageProps} />
+      <PlayerContextProvider>
+        <PlaylistContextProvider>
+          <ThemeProvider theme={defaultTheme}>
+            <Component {...pageProps} />
 
-        <GlobalStyle />
+            <GlobalStyle />
 
-        <Toaster />
-      </ThemeProvider>
+            <Toaster />
+          </ThemeProvider>
+        </PlaylistContextProvider>
+      </PlayerContextProvider>
     </AuthContextProvider>
   )
 }

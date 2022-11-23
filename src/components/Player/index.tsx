@@ -1,5 +1,16 @@
 import Image from "next/image"
-import { HandsClapping, Pause, Play, Queue, Repeat, Shuffle, SkipBack, SkipForward, Star } from "phosphor-react"
+import * as Dialog from "@radix-ui/react-dialog"
+import { 
+    HandsClapping, 
+    Pause, 
+    Play, 
+    Queue, 
+    Repeat, 
+    Shuffle, 
+    SkipBack, 
+    SkipForward, 
+    Star 
+} from "phosphor-react"
 
 import { 
     PrimaryButtonsContainer, 
@@ -14,9 +25,10 @@ import {
     SliderRange,
     SliderThumb
 } from "./styles"
+import { ModalContent } from "../ModalContent"
 
 export function Player() {
-   const isPlaying = true 
+   const isPlaying = false 
 
    return (
     <PlayerContainer isPlaying={isPlaying}>
@@ -80,9 +92,18 @@ export function Player() {
                 <Star size={28} weight="fill" />
             </SecondaryControllButton>
 
-            <SecondaryControllButton isActive={false}>
-                <Queue size={28} weight="fill" />
-            </SecondaryControllButton>
+            <Dialog.Root>
+                <Dialog.Trigger asChild>
+                    <SecondaryControllButton isActive={false}>
+                        <Queue size={28} weight="fill" />
+                    </SecondaryControllButton>
+                </Dialog.Trigger>
+
+                <ModalContent 
+                    hasPlaylistsCarroussel 
+                    onCreate={() => console.log('hello')}
+                />
+            </Dialog.Root>
 
             <SecondaryControllButton isActive>
                 <HandsClapping size={28} weight="fill" />

@@ -11,27 +11,10 @@ import {
 } from "../styles/pages/playlists"
 import { ModalContent } from "../components/ModalContent"
 import { withSSRPrivate } from "../utils/withSSRPrivate"
-import { setupApiClient } from "../services/api"
-import { useState } from "react"
+import { usePlaylists } from "../contexts/PlaylistContext"
 
-export type Playlist = {
-  id: string
-  name: string
-  coverImage: string
-  slug: string
-  episodesCount: number
-}
-
-interface PlaylistsProps {
-  playlistsData: Playlist[]
-}
-
-function Playlists({ playlistsData }: PlaylistsProps) {
-  const [playlists, setPlaylists] = useState<Playlist[]>(playlistsData)
-
-  function handleUpdateListOfPlaylists(playlist: Playlist) {
-    setPlaylists(data => [playlist, ...data])
-  }
+function Playlists() {
+  const { playlists, handleUpdateListOfPlaylists } = usePlaylists()
 
   return (
     <DefaultLayout>
@@ -96,13 +79,7 @@ function Playlists({ playlistsData }: PlaylistsProps) {
 export default Playlists
 
 export const getServerSideProps = withSSRPrivate(async ctx => {
-  const apiClient = setupApiClient(ctx)
-
-  const response = await apiClient.get<Playlist[]>("/playlists")
-
   return {
-    props: {
-      playlistsData: response.data
-    }
+    props: {}
   }
 })

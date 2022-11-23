@@ -1,19 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import { HandsClapping } from "phosphor-react";
+import { usePlayer } from "../../contexts/PlayerContext";
 import { PlayButton } from "../PlayButton";
 import { TableContainer } from "./styles";
 
 type TableRowData = {
     id: string
-    imageAndTitle: {
-        imgUrl: string
-        title: string
-    }
+    thumbnail: string
+    title: string
     slug: string
     members: string
     publishedAt: string
-    duration: string
+    duration: number
+    url: string
     aplauses: number
 }
 
@@ -22,6 +22,8 @@ interface TableProps {
 }    
 
 export function Table({ episodes }: TableProps) {
+   const { play } = usePlayer()
+
    return (
     <TableContainer cellSpacing={0}>
         <thead>
@@ -36,14 +38,14 @@ export function Table({ episodes }: TableProps) {
             <tr key={episode.id}>
                 <td>
                     <Image 
-                        src={episode.imageAndTitle.imgUrl}
-                        alt={`thumbnail do episódio - ${episode.imageAndTitle.title}`}
+                        src={episode.thumbnail}
+                        alt={`thumbnail do episódio - ${episode.title}`}
                         width={120}
                         height={120}
                     /> 
 
-                    <Link href={`/episode/${episode.slug}`} title={episode.imageAndTitle.title}>
-                        {episode.imageAndTitle.title}
+                    <Link href={`/episode/${episode.slug}`} title={episode.title}>
+                        {episode.title}
                     </Link>
                 </td>
 
@@ -58,7 +60,7 @@ export function Table({ episodes }: TableProps) {
                 </td>
 
                 <td>
-                    <span title={episode.duration}>
+                    <span title={episode.duration.toString()}>
                         {episode.duration}
                     </span>
                 </td>
@@ -69,7 +71,10 @@ export function Table({ episodes }: TableProps) {
                 </td>
 
                 <td>
-                    <PlayButton variant="outlined" />
+                    <PlayButton 
+                        variant="outlined" 
+                        onClick={() => play(episode)}
+                    />
                 </td>
             </tr>
         ))}

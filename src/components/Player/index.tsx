@@ -26,37 +26,62 @@ import {
     SliderThumb
 } from "./styles"
 import { ModalContent } from "../ModalContent"
+import { usePlayer } from "../../contexts/PlayerContext"
+import { useEffect, useRef } from "react"
 
 export function Player() {
-   const isPlaying = false 
+    const { isPlaying, episodeList, currentEpisodeIndex, togglePlay } = usePlayer()
+    const audioRef = useRef<HTMLAudioElement>(null)
+
+    const episodePlaying = episodeList[currentEpisodeIndex]
+
+    useEffect(() =>  {
+      if (!audioRef.current) {
+        return;
+      }
+
+      if (isPlaying) {
+        audioRef.current.play()
+      } else {
+        audioRef.current.pause()
+      }
+    }, [isPlaying])
 
    return (
-    <PlayerContainer isPlaying={isPlaying}>
+    <PlayerContainer isPlaying={!!episodePlaying}>
         <EpisodeDetailsContainer>
             <Image 
-                src="/card-image.png"
+                src={episodePlaying?.thumbnail}
                 alt=""
                 width={150}
                 height={150}
             /> 
 
             <div className="texts">
-                <h3 title="A vida é boa">
-                    A vida é boa
+                <h3 title={episodePlaying?.title}>
+                    {episodePlaying?.title}
                 </h3>
 
-                <span title="Tiago, Diego e Pellizzetti">
-                    Tiago, Diego e Pellizzetti
+                <span title={episodePlaying?.members}>
+                    {episodePlaying?.members}
                 </span>
             </div>
         </EpisodeDetailsContainer>
+
+        {episodePlaying && (
+            <audio 
+                src={episodePlaying.url} 
+                autoPlay
+                ref={audioRef}
+            />
+        )}
 
         <PrimaryButtonsContainer>
             <SkipButton disabled>
                 <SkipBack size={32} weight="fill" />
             </SkipButton>
 
-            <button className="play-button">
+            <button className="play-button" onClick={togglePlay}>
                 {isPlaying ? <Pause size={32} weight="fill" /> : <Play size={32} weight="fill" />}
             </button>
 

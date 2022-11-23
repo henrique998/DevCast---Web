@@ -15,7 +15,6 @@ import {
   MobileCarrousselContainer
 } from "../styles/pages/home"
 
-import { tableData } from "../utils/table.data"
 import { withSSRPrivate } from "../utils/withSSRPrivate"
 import { setupApiClient } from "../services/api"
 import { format, parseISO } from "date-fns"
@@ -37,14 +36,14 @@ type Episode = {
 
 type TableEpisode = {
   id: string
-  imageAndTitle: {
-      imgUrl: string
-      title: string
-  }
+  thumbnail: string
+  title: string
   slug: string
   members: string
   publishedAt: string
-  duration: string
+  duration: number
+  durationAsString: string
+  url: string
   aplauses: number
 }
 
@@ -54,7 +53,8 @@ type LastEpisode = {
   title: string
   members: string
   publishedAt: string
-  duration: string
+  duration: number
+  durationAsString: string
   slug: string
   url: string
 }
@@ -78,7 +78,7 @@ function Home({ lastEpisodes, allEpisodes }: HomeProps) {
                   <EpisodeCard 
                     path={`/episode/${episode.slug}`}
                     imageUrl={episode.thumbnail}
-                    duration={episode.duration}
+                    duration={episode.durationAsString}
                     title={episode.title}
                     members={episode.members}
                     publishedAt={episode.publishedAt}
@@ -183,7 +183,8 @@ export const getServerSideProps = withSSRPrivate(async ctx => {
         publishedAt: format(parseISO(episode.publishedAt), 'd MMM yy', {
           locale: ptBR
         }),
-        duration: convertDurationToTimeString(episode.duration),
+        duration: episode.duration,
+        durationAsString: convertDurationToTimeString(episode.duration),
         aplauses: episode.likes
       }
     })
@@ -193,16 +194,16 @@ export const getServerSideProps = withSSRPrivate(async ctx => {
     .map(episode => {
       return {
         id: episode.id,
-        imageAndTitle: {
-          imgUrl: episode.thumbnail,
-          title: episode.title,
-        },
+        thumbnail: episode.thumbnail,
+        title: episode.title,
         slug: episode.slug,
         members: episode.members,
         publishedAt: format(parseISO(episode.publishedAt), 'd MMM yy', {
           locale: ptBR
         }),
-        duration: convertDurationToTimeString(episode.duration),
+        duration: episode.duration,
+        durationAsString: convertDurationToTimeString(episode.duration),
+        url: episode.url,
         aplauses: episode.likes
       }
     })

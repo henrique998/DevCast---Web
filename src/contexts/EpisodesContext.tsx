@@ -1,8 +1,9 @@
 import produce from "immer"
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
+import { useContextSelector } from "use-context-selector"
 import { api } from "../services/apiClient"
 import { useAuth } from "./AuthContext"
-import { usePlayer } from "./PlayerContext"
+import { PlayerContext } from "./PlayerContext"
 
 export type FavoriteEpisode = {
     id: string
@@ -37,7 +38,9 @@ export function EpisodesContextProvider({ children }: EpisodesContextProviderPro
     const [hasEpisodeApplauded, setHasEpisodeApplauded] = useState(false)
 
     const { account } = useAuth()
-    const { episodePlaying } = usePlayer()
+    const episodePlaying = useContextSelector(PlayerContext, ctx => {
+        return ctx.episodePlaying
+    }) 
 
     function fetchFavoritesEpisodes() {
         api.get<FavoriteEpisode[]>("/favorites-episodes/short-data")

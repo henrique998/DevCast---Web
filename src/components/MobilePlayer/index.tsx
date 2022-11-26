@@ -33,32 +33,75 @@ import {
     PreviewMobileSliderContainer
 } from "./styles"
 import { ModalContent } from "../ModalContent"
-import { usePlayer } from "../../contexts/PlayerContext"
+import { PlayerContext } from "../../contexts/PlayerContext"
 import { convertDurationToTimeString } from "../../utils/convertDurationToTimeString"
 import { useEffect, useState } from "react"
 import { useEpisodes } from "../../contexts/EpisodesContext"
+import { useContextSelector } from "use-context-selector"
 
 export function MobilePlayer() {
     const [isShowingDetails, setIsShowingDetails] = useState(false)
 
-    const { 
-        episodePlaying, 
-        progress, 
-        handleSeek,
-        isShuffling,
-        toggleShuffle,
-        episodeList,
-        playPrevious,
-        hasPrevious,
-        togglePlay,
-        toggleLoop,
-        isPlaying,
-        isLooping,
-        playNext,
-        hasNext,
-        clearPlayerState,
-    } = usePlayer()
+    const episodePlaying = useContextSelector(PlayerContext, ctx => {
+        return ctx.episodePlaying
+    }) 
+     
+    const progress = useContextSelector(PlayerContext, ctx => {
+        return ctx.progress
+    }) 
 
+    const handleSeek = useContextSelector(PlayerContext, ctx => {
+        return ctx.handleSeek
+    })
+     
+    const isShuffling = useContextSelector(PlayerContext, ctx => {
+        return ctx.isShuffling
+    })
+     
+    const toggleShuffle = useContextSelector(PlayerContext, ctx => {
+        return ctx.toggleShuffle
+    })
+
+    const episodeList = useContextSelector(PlayerContext, ctx => {
+        return ctx.episodeList
+    })
+
+    const playPrevious = useContextSelector(PlayerContext, ctx => {
+        return ctx.playPrevious
+    })
+     
+    const hasPrevious = useContextSelector(PlayerContext, ctx => {
+        return ctx.hasPrevious
+    })
+     
+    const togglePlay = useContextSelector(PlayerContext, ctx => {
+        return ctx.togglePlay
+    })
+    
+    const toggleLoop = useContextSelector(PlayerContext, ctx => {
+        return ctx.toggleLoop
+    })
+    
+    const isPlaying = useContextSelector(PlayerContext, ctx => {
+        return ctx.isPlaying
+    })
+    
+    const isLooping = useContextSelector(PlayerContext, ctx => {
+        return ctx.isLooping
+    })
+    
+    const playNext = useContextSelector(PlayerContext, ctx => {
+        return ctx.playNext
+    })
+     
+    const hasNext = useContextSelector(PlayerContext, ctx => {
+        return ctx.hasNext
+    })
+    
+    const clearPlayerState = useContextSelector(PlayerContext, ctx => {
+        return ctx.clearPlayerState
+    })
+   
     const { 
         isEpisodeFavorite, 
         handleAddEpisodeToFavorites,

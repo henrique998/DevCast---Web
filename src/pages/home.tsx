@@ -19,7 +19,8 @@ import { setupApiClient } from "../services/api"
 import { format, parseISO } from "date-fns"
 import { convertDurationToTimeString } from "../utils/convertDurationToTimeString"
 import { ptBR } from "date-fns/locale"
-import { PlayerEpisode, usePlayer } from "../contexts/PlayerContext"
+import { PlayerContext, PlayerEpisode } from "../contexts/PlayerContext"
+import { useContextSelector } from "use-context-selector"
 
 type Episode = {
   id: string
@@ -65,9 +66,11 @@ interface HomeProps {
 }
 
 function Home({ allEpisodes, lastEpisodes }: HomeProps) {
-  const { playList } = usePlayer()
-
   const episodesList: PlayerEpisode[] = [...lastEpisodes, ...allEpisodes]
+
+  const playList = useContextSelector(PlayerContext, ctx => {
+    return ctx.playList
+  })
 
   return (
     <DefaultLayout>

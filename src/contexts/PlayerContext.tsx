@@ -1,4 +1,5 @@
-import { createContext, MutableRefObject, ReactNode, useContext, useRef, useState } from "react"
+import { MutableRefObject, ReactNode, useRef, useState } from "react"
+import { createContext, useContextSelector } from "use-context-selector"
 
 export type PlayerEpisode = {
    id: string
@@ -142,8 +143,4 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
          {children}
       </PlayerContext.Provider>
    )
-}
-
-export function usePlayer() {
-   return useContext(PlayerContext)
 }

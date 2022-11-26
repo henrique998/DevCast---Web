@@ -1,10 +1,11 @@
 import { ReactNode } from "react";
+import { useContextSelector } from "use-context-selector";
 import { BottomMenu } from "../components/BottomMenu";
 import { Header } from "../components/Header";
 import { MobilePlayer } from "../components/MobilePlayer";
 import { Player } from "../components/Player";
 import { Sidebar } from "../components/Sidebar";
-import { usePlayer } from "../contexts/PlayerContext";
+import { PlayerContext } from "../contexts/PlayerContext";
 import { DefaultLayoutContainer } from "./styles";
 
 interface DefaultLayoutProps {
@@ -12,22 +13,24 @@ interface DefaultLayoutProps {
 }
 
 export function DefaultLayout({ children }: DefaultLayoutProps) {
-    const { episodePlaying } = usePlayer()
+    const episodePlaying = useContextSelector(PlayerContext, ctx => {
+        return ctx.episodePlaying
+    }) 
 
-   return (
-    <DefaultLayoutContainer>
-        <Sidebar />
+    return (
+        <DefaultLayoutContainer>
+            <Sidebar />
 
-        <main>
-            <Header />
+            <main>
+                <Header />
 
-            {children}
+                {children}
 
-            {episodePlaying && <MobilePlayer />}
-            <BottomMenu />
-        </main>
+                {episodePlaying && <MobilePlayer />}
+                <BottomMenu />
+            </main>
 
-        <Player />
-    </DefaultLayoutContainer>
-   )
+            <Player />
+        </DefaultLayoutContainer>
+    )
 }

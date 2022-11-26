@@ -26,11 +26,12 @@ import {
     PlaylistsWrapper 
 } from "./styles"
 import { Toast } from "../Toast"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useCallback, useState } from "react"
 import { SelectedThumbnail } from "../SelectedThumbnail"
 import { api } from "../../services/apiClient"
 import { Playlist, usePlaylists } from "../../contexts/PlaylistContext"
-import { usePlayer } from "../../contexts/PlayerContext"
+import { PlayerContext } from "../../contexts/PlayerContext"
+import { useContextSelector } from "use-context-selector"
 
 interface ModalContentProps {
     hasPlaylistsCarroussel?: boolean
@@ -50,7 +51,10 @@ export function ModalContent({ hasPlaylistsCarroussel = true, onCreate }: ModalC
     const [selectedPlaylistId, setSelectedPlaylistId] = useState('')
 
     const { playlists, updateListOfPlaylists } = usePlaylists()
-    const { episodePlaying } = usePlayer()
+
+    const episodePlaying = useContextSelector(PlayerContext, ctx => {
+        return ctx.episodePlaying
+    }) 
 
     const { register, handleSubmit, formState, reset } = useForm<CreateNewPlaylistFormData>({
         resolver: zodResolver(createNewPlaylistFormValidationSchema)
@@ -75,7 +79,7 @@ export function ModalContent({ hasPlaylistsCarroussel = true, onCreate }: ModalC
         setPreviewThumbnail('')
     }
 
-    async function handleCreateNewPlaylist(data: CreateNewPlaylistFormData) {
+    const handleCreateNewPlaylist = useCallback(async (data: CreateNewPlaylistFormData) => {
         const formData = new FormData()
 
         formData.append("name", data.name)
@@ -103,9 +107,9 @@ export function ModalContent({ hasPlaylistsCarroussel = true, onCreate }: ModalC
             toast.error(err.message)
         }
 
-    }
+    }, [])
 
-    async function handleAddEpisodeToPlaylist() {
+    const handleAddEpisodeToPlaylist = useCallback(async () => {
         if (!selectedPlaylistId || !episodePlaying.id) {
             return;
         }
@@ -121,7 +125,7 @@ export function ModalContent({ hasPlaylistsCarroussel = true, onCreate }: ModalC
         } catch (error) {
             alert(error.message)
         }
-    }
+    }, [])
 
     const { errors } = formState
 

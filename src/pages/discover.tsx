@@ -1,7 +1,8 @@
 import { format, parseISO } from "date-fns"
 import { ptBR } from "date-fns/locale"
+import { useContextSelector } from "use-context-selector"
 import { EpisodeCard } from "../components/EpisodeCard"
-import { usePlayer } from "../contexts/PlayerContext"
+import { PlayerContext } from "../contexts/PlayerContext"
 import { DefaultLayout } from "../layouts/DefaultLayout"
 import { setupApiClient } from "../services/api"
 import { DiscoverContainer, DiscoverWrapper } from "../styles/pages/discover"
@@ -26,7 +27,9 @@ interface DiscoverProps {
 }
 
 function Discover({ episodes }: DiscoverProps) {
-  const { playList } = usePlayer()
+  const playList = useContextSelector(PlayerContext, ctx => {
+    return ctx.playList
+  })
 
   return (
     <DefaultLayout>

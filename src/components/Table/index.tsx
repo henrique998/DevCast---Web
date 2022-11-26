@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { HandsClapping } from "phosphor-react";
-import { PlayerEpisode, usePlayer } from "../../contexts/PlayerContext";
+import { useContextSelector } from "use-context-selector";
+import { PlayerContext, PlayerEpisode } from "../../contexts/PlayerContext";
 import { LastEpisode } from "../../pages/home";
 import { PlayButton } from "../PlayButton";
 import { TableContainer } from "./styles";
@@ -26,7 +27,9 @@ interface TableProps {
 }    
 
 export function Table({ lastEpisodes, tableEpisodes, episodesList }: TableProps) {
-   const { playList } = usePlayer()
+    const playList = useContextSelector(PlayerContext, ctx => {
+        return ctx.playList
+    }) 
 
    return (
     <TableContainer cellSpacing={0}>

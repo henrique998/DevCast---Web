@@ -1,8 +1,9 @@
 import { format, parseISO } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { MicrophoneSlash } from "phosphor-react"
+import { useContextSelector } from "use-context-selector"
 import { EpisodeCard } from "../components/EpisodeCard"
-import { usePlayer } from "../contexts/PlayerContext"
+import { PlayerContext } from "../contexts/PlayerContext"
 import { DefaultLayout } from "../layouts/DefaultLayout"
 import { setupApiClient } from "../services/api"
 import { EmptyFavoritesEpisodesContainer, FavoritesContainer, FavoritesWrapper } from "../styles/pages/favorites"
@@ -28,50 +29,52 @@ interface FavoritesProps {
 }
 
 function Favorites({ episodes }: FavoritesProps) {
-    const { playList } = usePlayer()
+    const playList = useContextSelector(PlayerContext, ctx => {
+        return ctx.playList
+    })
 
-  return (
-    <DefaultLayout>
-      <FavoritesContainer>
-        <FavoritesWrapper>
-            <header>
-                <h1>
-                    <strong>Ouça</strong> agora os seus episódios <br /> 
-                    favoritos
-                </h1>
+    return (
+        <DefaultLayout>
+        <FavoritesContainer>
+            <FavoritesWrapper>
+                <header>
+                    <h1>
+                        <strong>Ouça</strong> agora os seus episódios <br /> 
+                        favoritos
+                    </h1>
 
-                <p>Aqui você pode acessar todos os episódios que você mais gostou</p>
-            </header>
+                    <p>Aqui você pode acessar todos os episódios que você mais gostou</p>
+                </header>
 
-            {episodes?.length > 0 ? (
-                <ul>
-                    {episodes?.map((episode, index) => (
-                        <li key={episode.id}>
-                            <EpisodeCard 
-                                path={`/episode/${episode.slug}`}
-                                imageUrl={episode.thumbnail}
-                                duration={episode.durationAsString}
-                                title={episode.title}
-                                members={episode.members}
-                                publishedAt={episode.publishedAt}
-                                onPlay={() => playList(episodes, index)}
-                            />
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <EmptyFavoritesEpisodesContainer>
-                    <MicrophoneSlash size={64} weight="fill" />
+                {episodes?.length > 0 ? (
+                    <ul>
+                        {episodes?.map((episode, index) => (
+                            <li key={episode.id}>
+                                <EpisodeCard 
+                                    path={`/episode/${episode.slug}`}
+                                    imageUrl={episode.thumbnail}
+                                    duration={episode.durationAsString}
+                                    title={episode.title}
+                                    members={episode.members}
+                                    publishedAt={episode.publishedAt}
+                                    onPlay={() => playList(episodes, index)}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <EmptyFavoritesEpisodesContainer>
+                        <MicrophoneSlash size={64} weight="fill" />
 
-                    <h2>Você ainda não possui episódios favoritos.</h2>
+                        <h2>Você ainda não possui episódios favoritos.</h2>
 
-                    <p>Adicione os episódios que você mais gostou para ouvi-los mais tarde.</p>
-                </EmptyFavoritesEpisodesContainer>
-            )}
-        </FavoritesWrapper>
-      </FavoritesContainer>
-    </DefaultLayout>
-  )
+                        <p>Adicione os episódios que você mais gostou para ouvi-los mais tarde.</p>
+                    </EmptyFavoritesEpisodesContainer>
+                )}
+            </FavoritesWrapper>
+        </FavoritesContainer>
+        </DefaultLayout>
+    )
 }
 
 export default Favorites

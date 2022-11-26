@@ -3,6 +3,10 @@ import styled from "styled-components"
 export const DiscoverContainer = styled.section`
     height: calc(100vh - 4.375rem);
     overflow-y: auto;
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
 `  
 
 export const DiscoverWrapper = styled.div`

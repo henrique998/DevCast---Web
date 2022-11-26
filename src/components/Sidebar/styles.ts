@@ -2,7 +2,7 @@ import Link from "next/link";
 import styled, { css } from "styled-components";
 
 export const SidebarContainer = styled.aside`
-    width: 16.25rem;
+    width: 4.375rem;
     height: 100vh;
     overflow: hidden;
     border-right: 1px solid ${props => props.theme.gray200};
@@ -13,6 +13,10 @@ export const SidebarContainer = styled.aside`
         max-width: 7.5rem;
         width: 100%;
         height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
         margin-left: auto;
         margin-right: auto;
@@ -28,7 +32,9 @@ export const SidebarContainer = styled.aside`
             margin-top: 6.25rem;
 
             ul {
-                display: grid;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
                 gap: 2.25rem;
             }
         }
@@ -49,11 +55,6 @@ export const NavLinkContainer = styled(Link)<NavLinkContainerProps>`
     gap: 0.625rem;
 
     color: ${props => props.isActive ? props.theme.purple : props.theme.gray300};
-
-    span {
-        font-size: 1.125rem;
-        font-weight: 500;
-    }
 
     transition: 0.2s;
 

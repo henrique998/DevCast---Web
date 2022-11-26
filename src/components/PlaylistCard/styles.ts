@@ -98,4 +98,9 @@ export const EmptyThumbnail = styled.div`
     svg {
         color: ${props => props.theme.gray600};
     }
+
+    @media (max-width: 414px) {
+        width: 21.875rem;
+        height: 21.875rem;
+    }
 `

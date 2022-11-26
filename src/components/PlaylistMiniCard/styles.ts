@@ -27,6 +27,26 @@ export const PlaylistMiniCardContainer = styled(RadioGroup.Item)`
         img {
             border-color: ${props => props.theme.purple};
         }
+
+        > div {
+            border-color: ${props => props.theme.purple};
+        }
+    }
+`
+
+export const EmptyPlaylistMiniCard = styled.div`
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 6px;
+    border: 2.5px solid transparent;
+    background-color: ${props => props.theme.gray200};
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+        color: ${props => props.theme.gray600};
     }
 `
 

@@ -14,7 +14,7 @@ import { withSSRPrivate } from "../utils/withSSRPrivate"
 import { usePlaylists } from "../contexts/PlaylistContext"
 
 function Playlists() {
-  const { playlists, handleUpdateListOfPlaylists } = usePlaylists()
+  const { playlists, updateListOfPlaylists } = usePlaylists()
 
   return (
     <DefaultLayout>
@@ -40,7 +40,7 @@ function Playlists() {
 
             <ModalContent 
               hasPlaylistsCarroussel={false} 
-              onCreate={handleUpdateListOfPlaylists}
+              onCreate={updateListOfPlaylists}
             />
           </Dialog.Root>
 

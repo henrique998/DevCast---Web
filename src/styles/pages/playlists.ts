@@ -3,6 +3,10 @@ import styled from "styled-components"
 export const PlaylistsContainer = styled.section`
     height: calc(100vh - 4.375rem);
     overflow-y: auto;
+    
+    ::-webkit-scrollbar {
+        display: none;
+    }
 `
 
 export const PlaylistsWrapper = styled.div`

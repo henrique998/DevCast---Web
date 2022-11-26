@@ -66,36 +66,40 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
    }, [])
 
    useEffect(() =>  {
-     const url = new URLSearchParams(window.location.search)
+      const url = new URLSearchParams(window.location.search)
 
-     const code = url.get('code')
+      const code = url.get('code')
 
-     if (code) {
-      api.post<IAxiosResponse>(`/authentication/github`, {
-         github_code: code,
-      })
-      .then((response) => {
-         const { token, refreshToken, userData } = response.data
-
-         setCookie(undefined, "@devcast-token", token, {
-            maxAge: 60 * 60 * 24 * 30,
-            path: "/"
-         })
-
-         setCookie(undefined, "@devcast-refresh-token", refreshToken, {
-            maxAge: 60 * 60 * 24 * 30,
-            path: "/"
-         })
-
-         setAccount(userData)
-
-         api.defaults.headers.common['Authorization'] = `Bearer ${token}`
-      })
-
-      url.delete('code')
-
-      Router.push('/home')
-    }
+      try {
+         if (code) {
+            api.post<IAxiosResponse>("/authentication/github", {
+               github_code: code,
+            })
+            .then((response) => {
+               const { token, refreshToken, userData } = response.data
+   
+               setCookie(undefined, "@devcast-token", token, {
+                  maxAge: 60 * 60 * 24 * 30,
+                  path: "/"
+               })
+   
+               setCookie(undefined, "@devcast-refresh-token", refreshToken, {
+                  maxAge: 60 * 60 * 24 * 30,
+                  path: "/"
+               })
+   
+               setAccount(userData)
+   
+               api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+            })
+   
+            url.delete('code')
+   
+            Router.push('/home')
+         }
+      } catch (error) {
+         console.log(error)
+      }
    }, [])
 
    async function signIn(credentials: SignInCredentials) {

@@ -15,7 +15,7 @@ export function Sidebar() {
     <SidebarContainer>
       <div className="wrapper">
         <Image 
-          src="/Logo.svg"
+          src="/Microphone.svg"
           alt=""
           width={354}
           height={96}
@@ -26,41 +26,35 @@ export function Sidebar() {
             <li>
               <NavLink 
                 path="/home"
-                label="Home"
-                icon={<House size={24} weight="fill" />}
+                icon={<House size={26} weight="fill" />}
               />
             </li>
 
             <li>
               <NavLink 
                 path="/discover"
-                label="Descobrir"
-                icon={<Compass size={24} weight="fill" />}
+                icon={<Compass size={26} weight="fill" />}
               />
             </li>
 
             <li>
               <NavLink 
                 path="/favorites"
-                label="Favoritos"
-                icon={<Star size={24} weight="fill" />}
+                icon={<Star size={26} weight="fill" />}
               />
             </li>
 
             <li>
               <NavLink 
                 path="/playlists"
-                label="Playlists"
-                icon={<Queue size={24} weight="fill" />}
+                icon={<Queue size={26} weight="fill" />}
               />
             </li>
           </ul>
         </nav>
 
         <LoggoutButton onClick={signOut}>
-          <Power size={24} weight="bold" />
-
-          <span>Sair</span>
+          <Power size={26} weight="bold" />
         </LoggoutButton>
       </div>
     </SidebarContainer>

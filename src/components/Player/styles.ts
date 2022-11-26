@@ -1,32 +1,139 @@
 import styled, { css } from "styled-components"
 import * as Slider from "@radix-ui/react-slider"
 
-interface PlayerContainerProps {
-    isPlaying: boolean
-}
+export const PlayerContainer = styled.div`
+    width: 26.5rem;
+    height: 100vh;
+    overflow: hidden;
 
-export const PlayerContainer = styled.div<PlayerContainerProps>`
-    max-width: 70.875rem;
-    width: 100%;
-
-    margin-left: 18.5rem;
-
-    background-color: ${props => props.theme.gray200};
+    background-color: ${props => props.theme.gray900};
     border-radius: 6px;
-    padding: 1.125rem 1rem;
+    border-left: 1px solid ${props => props.theme.gray200};
+    padding: 2rem;
 
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
 
-    position: fixed;
-    left: 1.875rem;
-    bottom: ${props => props.isPlaying ? '1.875rem' : '-100%'};
-    right: 1.875rem;
-    z-index: 100;
+        > div {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    }
 
     @media (max-width: 414px) {
         display: none;
+    }
+`
+
+export const EmptyPlayerThumbnailContainer = styled.div`
+    margin-top: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    width: 18.5rem;
+    height: 21.625rem;
+    border-radius: 0.5rem;
+    border: 3px dashed ${props => props.theme.gray300};
+    background-color: ${props => props.theme.gray200};
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    strong {
+        width: 9.625rem;
+
+        text-align: center;
+    }
+`
+
+export const ThumbnailContainer = styled.div`
+    margin-top: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    width: 18.5rem;
+    height: 21.625rem;
+    
+    img {
+        border-radius: 0.5rem;
+        object-fit: cover;
+    }
+`
+
+export const InfoContainer = styled.div`
+    margin-top: 2rem;
+
+    height: 3.625rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .texts {
+        text-align: center;
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            max-width: 16.125rem;
+            width: 100%;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        span {
+            display: block;
+
+            font-size: 1rem;
+            max-width: 16.125rem;
+            width: 100%;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+`
+
+export const ControllsContainer = styled.footer`
+    margin-top: 2rem;
+
+    max-width: 18.125rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .play-button {
+        width: 3.125rem;
+        height: 3.125rem;
+        border-radius: 50%;
+        background-color: ${props => props.theme.purple};
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        transition: filter 0.2s;
+    
+        &:not(:disabled):hover {
+            svg {
+                filter: brightness(0.85);
+            }
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: auto;
+        }
     }
 `
 
@@ -36,6 +143,8 @@ export const EpisodeDetailsContainer = styled.div`
     gap: 1rem;
 
     img {
+        display: block;
+
         width: 3.125rem;
         height: 3.125rem;
         object-fit: cover;
@@ -72,31 +181,6 @@ export const EpisodeDetailsContainer = styled.div`
     }
 `
 
-export const PrimaryButtonsContainer = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-
-    .play-button {
-        width: 3.125rem;
-        height: 3.125rem;
-        border-radius: 50%;
-        background-color: ${props => props.theme.purple};
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        transition: filter 0.2s;
-    
-        &:hover {
-            svg {
-                filter: brightness(0.85);
-            }
-        }
-    }
-`
-
 export const SkipButton = styled.button`
     svg {
         color: ${props => props.theme.gray600};
@@ -104,8 +188,8 @@ export const SkipButton = styled.button`
 
     &:disabled {
         svg {
-            color: ${props => props.theme.gray300};
-            cursor: not-allowed;
+            opacity: 0.5;
+            cursor: auto;
         }
     }
 
@@ -119,15 +203,25 @@ export const SkipButton = styled.button`
 `
 
 export const SliderContainer = styled.div`
+    margin-top: 2rem;
+
     display: flex;
     align-items: center;
-    gap: 0.875rem;
+    gap: 0.5rem;
 
     user-select: none;
 
-    > span {
+    span {
         font-size: 0.875rem;
     }
+`
+
+interface SliderTimeProps {
+    isDisabled: boolean
+} 
+
+export const SliderTime = styled.span<SliderTimeProps>`
+    opacity: ${props => props.isDisabled ? '0.5' : '1'};
 `
 
 export const SliderRoot = styled(Slider.Root)`
@@ -148,6 +242,10 @@ export const SliderTrack = styled(Slider.Track)`
     cursor: pointer;
 
     flex: 1;
+
+    &[data-disabled] {
+        cursor: auto;
+    }
 `
 
 export const SliderRange = styled(Slider.Range)`
@@ -157,6 +255,10 @@ export const SliderRange = styled(Slider.Range)`
     height: 100%;
 
     cursor: pointer;
+
+    &[data-disabled] {
+        cursor: auto;
+    }
 `
 
 export const SliderThumb = styled(Slider.Thumb)`
@@ -175,6 +277,10 @@ export const SliderThumb = styled(Slider.Thumb)`
     &:focus {
         cursor: grabbing;
     } 
+
+    &[data-disabled] {
+        display: none;
+    }
 `
 
 export const SecondaryButtonsContainer = styled.div`
@@ -206,13 +312,20 @@ export const SecondaryControllButton = styled.button<SecondaryControllButtonProp
         }
     `}
     
-    ${props => !props.isActive && css`
-        transition: filter 0.2s;
-    
-        &:hover {
-            svg {
-                color: ${props => props.theme.purple};
+    &:not(:disabled) {
+        ${props => !props.isActive && css`
+            transition: filter 0.2s;
+        
+            &:hover {
+                svg {
+                    color: ${props => props.theme.purple};
+                }
             }
-        }
-    `}
+        `}
+    }
+
+    &:disabled {
+        cursor: auto;
+        opacity: 0.85;
+    }
 `

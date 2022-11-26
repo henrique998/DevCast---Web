@@ -13,9 +13,6 @@ import {
 } from "phosphor-react"
 
 import { 
-    PrimaryButtonsContainer, 
-    SecondaryButtonsContainer, 
-    EpisodeDetailsContainer, 
     PlayerContainer, 
     SliderContainer, 
     SecondaryControllButton, 
@@ -23,17 +20,47 @@ import {
     SliderRoot,
     SliderTrack,
     SliderRange,
-    SliderThumb
+    SliderThumb,
+    EmptyPlayerThumbnailContainer,
+    InfoContainer,
+    ControllsContainer,
+    SliderTime,
+    ThumbnailContainer
 } from "./styles"
 import { ModalContent } from "../ModalContent"
 import { usePlayer } from "../../contexts/PlayerContext"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
+import { convertDurationToTimeString } from "../../utils/convertDurationToTimeString"
+import { useEpisodes } from "../../contexts/EpisodesContext"
 
 export function Player() {
-    const { isPlaying, episodeList, currentEpisodeIndex, togglePlay } = usePlayer()
-    const audioRef = useRef<HTMLAudioElement>(null)
+    const { 
+        handleAddEpisodeToFavorites, 
+        isEpisodeFavorite,
+        handleApplause,
+        hasEpisodeApplauded 
+    } = useEpisodes()
 
-    const episodePlaying = episodeList[currentEpisodeIndex]
+    const { 
+        isPlaying, 
+        isLooping,
+        isShuffling,
+        hasNext,
+        hasPrevious,
+        episodeList, 
+        episodePlaying,
+        progress,
+        audioRef,
+        togglePlay, 
+        toggleLoop,
+        toggleShuffle,
+        setPlayingState,
+        playNext,
+        playPrevious,
+        clearPlayerState,
+        updateProgress,
+        handleSeek
+    } = usePlayer()
 
     useEffect(() =>  {
       if (!audioRef.current) {
@@ -47,53 +74,116 @@ export function Player() {
       }
     }, [isPlaying])
 
+    function setupProgressListener() {
+        audioRef.current.currentTime = 0
+
+        audioRef.current.addEventListener('timeupdate', () => {
+            updateProgress(Math.floor(audioRef.current.currentTime))
+        })
+    }
+
+    function handleEpisodeEnded() {
+        if (hasNext) {
+            playNext()
+        } else {
+            clearPlayerState()
+        }
+    }
+
    return (
-    <PlayerContainer isPlaying={!!episodePlaying}>
-        <EpisodeDetailsContainer>
-            <Image 
-                src={episodePlaying?.thumbnail}
-                alt=""
-                width={150}
-                height={150}
-            /> 
+    <PlayerContainer>
+        <header>
+            <div>
+                <Image 
+                    src="/Microphone.svg"
+                    alt=""
+                    width={32}
+                    height={32}
+                />
 
-            <div className="texts">
-                <h3 title={episodePlaying?.title}>
-                    {episodePlaying?.title}
-                </h3>
-
-                <span title={episodePlaying?.members}>
-                    {episodePlaying?.members}
-                </span>
+                <span>Tocando agora</span>
             </div>
-        </EpisodeDetailsContainer>
+
+            <SecondaryControllButton 
+                isActive={isEpisodeFavorite} 
+                onClick={handleAddEpisodeToFavorites}
+                disabled={!episodePlaying}
+            >
+                <Star size={28} weight="fill" />
+            </SecondaryControllButton>
+        </header>
 
         {episodePlaying && (
             <audio 
                 src={episodePlaying.url} 
                 autoPlay
+                loop={isLooping}
                 ref={audioRef}
+                onPlay={() => setPlayingState(true)}
+                onPause={() => setPlayingState(false)}
+                onLoadedMetadata={setupProgressListener}
+                onEnded={handleEpisodeEnded}
             />
         )}
 
-        <PrimaryButtonsContainer>
-            <SkipButton disabled>
-                <SkipBack size={32} weight="fill" />
-            </SkipButton>
+        {episodePlaying ? (
+            <ThumbnailContainer>
+                <Image 
+                    src={episodePlaying.thumbnail}
+                    alt={`thumbnail do episódio: ${episodePlaying.title}`}
+                    width={296}
+                    height={346}
+                />
+            </ThumbnailContainer>
+        ) : (
+            <EmptyPlayerThumbnailContainer>
+                <strong>Selecione um podcast para ouvir</strong>
+            </EmptyPlayerThumbnailContainer>
+        )}
 
-            <button className="play-button" onClick={togglePlay}>
-                {isPlaying ? <Pause size={32} weight="fill" /> : <Play size={32} weight="fill" />}
-            </button>
+        <InfoContainer>
+            <Dialog.Root>
+                <Dialog.Trigger asChild>
+                    <SecondaryControllButton isActive={false} disabled={!episodePlaying}>
+                        <Queue size={28} weight="fill" />
+                    </SecondaryControllButton>
+                </Dialog.Trigger>
 
-            <SkipButton>
-                <SkipForward size={32} weight="fill" />
-            </SkipButton>
-        </PrimaryButtonsContainer>
+                <ModalContent 
+                    hasPlaylistsCarroussel 
+                />
+            </Dialog.Root>
+
+            <div className="texts">
+                <h2 title={episodePlaying?.title}>
+                    {episodePlaying?.title}
+                </h2>
+
+                <span title={episodePlaying?.members}>
+                    {episodePlaying?.members}
+                </span>
+            </div>
+
+            <SecondaryControllButton 
+                isActive={hasEpisodeApplauded} 
+                disabled={!episodePlaying}
+                onClick={handleApplause}
+            >
+                <HandsClapping size={28} weight="fill" />
+            </SecondaryControllButton>
+        </InfoContainer>
 
         <SliderContainer>
-            <span>12:02</span>
+            <SliderTime isDisabled={!episodePlaying}>
+                {convertDurationToTimeString(progress)}
+            </SliderTime>
 
-            <SliderRoot>
+            <SliderRoot 
+                max={episodePlaying?.duration} 
+                value={[progress]}
+                onValueChange={e => handleSeek(e)}
+                disabled={!episodePlaying}
+            >
                 <SliderTrack>
                     <SliderRange />
                 </SliderTrack>
@@ -101,39 +191,44 @@ export function Player() {
                 <SliderThumb />
             </SliderRoot>
 
-            <span>1:35:18</span>
+            <SliderTime isDisabled={!episodePlaying}>
+                {convertDurationToTimeString(episodePlaying?.duration ?? 0)}
+            </SliderTime>
         </SliderContainer>
 
-        <SecondaryButtonsContainer>
-            <SecondaryControllButton isActive={false}>
+        <ControllsContainer>
+            <SecondaryControllButton 
+                isActive={isShuffling} 
+                onClick={toggleShuffle}
+                disabled={episodeList?.length === 1}
+            >
                 <Shuffle size={28} weight="fill" />
             </SecondaryControllButton>
 
-            <SecondaryControllButton isActive>
+            <SkipButton onClick={playPrevious} disabled={!hasPrevious}>
+                <SkipBack size={32} weight="fill" />
+            </SkipButton>
+
+            <button 
+                className="play-button" 
+                onClick={togglePlay}
+                disabled={!episodePlaying}
+            >
+                {isPlaying ? <Pause size={32} weight="fill" /> : <Play size={32} weight="fill" />}
+            </button>
+
+            <SkipButton onClick={playNext} disabled={!hasNext}>
+                <SkipForward size={32} weight="fill" />
+            </SkipButton>
+
+            <SecondaryControllButton 
+                isActive={isLooping} 
+                onClick={toggleLoop}
+                disabled={!episodePlaying}
+            >
                 <Repeat size={28} weight="fill" />
             </SecondaryControllButton>
-
-            <SecondaryControllButton isActive={false}>
-                <Star size={28} weight="fill" />
-            </SecondaryControllButton>
-
-            <Dialog.Root>
-                <Dialog.Trigger asChild>
-                    <SecondaryControllButton isActive={false}>
-                        <Queue size={28} weight="fill" />
-                    </SecondaryControllButton>
-                </Dialog.Trigger>
-
-                <ModalContent 
-                    hasPlaylistsCarroussel 
-                    onCreate={() => console.log('hello')}
-                />
-            </Dialog.Root>
-
-            <SecondaryControllButton isActive>
-                <HandsClapping size={28} weight="fill" />
-            </SecondaryControllButton>
-        </SecondaryButtonsContainer> 
+        </ControllsContainer>
     </PlayerContainer>
    )
 }

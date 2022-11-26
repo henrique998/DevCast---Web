@@ -19,6 +19,13 @@ export const AvatarContainer = styled(Avatar.Root)<AvatarProps>`
         width: 6.25rem;
         height: 6.25rem;
     `}
+
+    @media (max-width: 414px) {
+        ${props => props.size === "md" && css`
+            width: 9.25rem;
+            height: 9.25rem;
+        `}   
+    }
 `
 
 export const AvatarFallback = styled(Avatar.Fallback)<AvatarProps>`
@@ -43,7 +50,6 @@ export const AvatarFallback = styled(Avatar.Fallback)<AvatarProps>`
     ${props => props.size === "sm" && css`
         width: 2.25rem;
         height: 2.25rem;
-
     `}
 
     ${props => props.size === "md" && css`
@@ -52,6 +58,19 @@ export const AvatarFallback = styled(Avatar.Fallback)<AvatarProps>`
 
         display: block;
     `}
+
+    @media (max-width: 414px) {
+        ${props => props.size === "md" && css`
+            width: 9.25rem;
+            height: 9.25rem;
+            
+            svg {
+                width: 3.25rem;
+                height: 3.25rem;
+            }
+        `} 
+        
+    }
 `
 
 export const AvatarImage = styled(Avatar.Image)`

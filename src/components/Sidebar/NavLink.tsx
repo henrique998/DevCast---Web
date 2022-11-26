@@ -4,18 +4,17 @@ import { NavLinkContainer } from "./styles"
 
 interface NavLinkProps {
     path: string
-    label: string
     icon: ReactElement<ReactSVG>
 }
 
-export function NavLink({ path, label, icon }: NavLinkProps) {
+export function NavLink({ path, icon }: NavLinkProps) {
     const router = useRouter()
 
     const isActive = router.pathname === path
 
    return (
     <NavLinkContainer href={path} isActive={isActive}>
-        {icon} <span>{label}</span>
+        {icon}
     </NavLinkContainer>
    )
 }

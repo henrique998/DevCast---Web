@@ -3,6 +3,11 @@ import styled from "styled-components";
 export const SettingsContainer = styled.section`
     height: calc(100vh - 4.375rem);
     overflow-y: auto;
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
     max-width: 35rem;
     width: 100%;
     

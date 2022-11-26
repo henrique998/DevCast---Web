@@ -2,7 +2,6 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 
 import { EpisodeCard } from "../components/EpisodeCard"
-import { Player } from "../components/Player"
 import { Table } from "../components/Table"
 
 import { DefaultLayout } from "../layouts/DefaultLayout"
@@ -20,6 +19,7 @@ import { setupApiClient } from "../services/api"
 import { format, parseISO } from "date-fns"
 import { convertDurationToTimeString } from "../utils/convertDurationToTimeString"
 import { ptBR } from "date-fns/locale"
+import { PlayerEpisode, usePlayer } from "../contexts/PlayerContext"
 
 type Episode = {
   id: string
@@ -47,7 +47,7 @@ type TableEpisode = {
   aplauses: number
 }
 
-type LastEpisode = {
+export type LastEpisode = {
   id: string
   thumbnail: string
   title: string
@@ -64,7 +64,11 @@ interface HomeProps {
   allEpisodes: TableEpisode[]
 }
 
-function Home({ lastEpisodes, allEpisodes }: HomeProps) {
+function Home({ allEpisodes, lastEpisodes }: HomeProps) {
+  const { playList } = usePlayer()
+
+  const episodesList: PlayerEpisode[] = [...lastEpisodes, ...allEpisodes]
+
   return (
     <DefaultLayout>
       <HomeContainer>
@@ -73,7 +77,7 @@ function Home({ lastEpisodes, allEpisodes }: HomeProps) {
             <h2>Últimos lançamentos</h2>
 
             <ul>
-              {lastEpisodes.map(episode => (
+              {lastEpisodes.map((episode, index) => (
                 <li key={episode.id}>
                   <EpisodeCard 
                     path={`/episode/${episode.slug}`}
@@ -82,6 +86,7 @@ function Home({ lastEpisodes, allEpisodes }: HomeProps) {
                     title={episode.title}
                     members={episode.members}
                     publishedAt={episode.publishedAt}
+                    onPlay={() => playList(episodesList, index)}
                   />
                 </li>
               ))}
@@ -93,57 +98,21 @@ function Home({ lastEpisodes, allEpisodes }: HomeProps) {
                   slidesPerView={1.2}
                   spaceBetween={18}
                 >
-                  <li>
-                    <SwiperSlide>
-                      <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                      />
-                    </SwiperSlide>
-                  </li>
-
-                  <li>
-                    <SwiperSlide>
-                      <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                      />
-                    </SwiperSlide>
-                  </li>
-
-                  <li>
-                    <SwiperSlide>
-                      <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                      />
-                    </SwiperSlide>
-                  </li>
-
-                  <li>
-                    <SwiperSlide>
-                      <EpisodeCard 
-                        path="/episode/01" 
-                        imageUrl="/card-image.png"
-                        duration="1:35:18"
-                        title="O que é um bom código?"
-                        members="Diego e Richard"
-                        publishedAt="8 Jan 22"
-                      />
-                    </SwiperSlide>
-                  </li>
+                  {lastEpisodes.map((episode, index) => (
+                    <li key={episode.id}>
+                      <SwiperSlide>
+                        <EpisodeCard 
+                          path={`/episode/${episode.slug}`}
+                          imageUrl={episode.thumbnail}
+                          duration={episode.durationAsString}
+                          title={episode.title}
+                          members={episode.members}
+                          publishedAt={episode.publishedAt}
+                          onPlay={() => playList(episodesList, index)}
+                        />
+                      </SwiperSlide>
+                    </li>
+                  ))}
                 </Swiper>
               </ul>
             </MobileCarrousselContainer>
@@ -152,10 +121,12 @@ function Home({ lastEpisodes, allEpisodes }: HomeProps) {
           <AllRealeasesTableContainer>
             <h2>Todos os lançamentos</h2>
              
-            <Table episodes={allEpisodes} />
+            <Table 
+              lastEpisodes={lastEpisodes} 
+              tableEpisodes={allEpisodes} 
+              episodesList={episodesList}
+            />
           </AllRealeasesTableContainer>
-
-          <Player />
         </HomeWrapper>
       </HomeContainer>
     </DefaultLayout>

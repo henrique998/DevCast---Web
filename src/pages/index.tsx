@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import { Envelope, List } from "phosphor-react"
 
@@ -14,8 +14,8 @@ import {
   TextsContainer, 
   UsersCountContainer 
 } from "../styles/pages/landing"
-import { withSSRGuest } from "../utils/withSSRGuest"
-import { setupApiClient } from "../services/api"
+
+import { api } from "../services/apiClient"
 
 type Account = {
   id: string
@@ -23,12 +23,9 @@ type Account = {
   avatarUrl: string
 }
 
-interface LandingProps {
-  accounts: Account[]
-}
-
-function Landing({ accounts }: LandingProps) {
+function Landing() {
   const [isMenuMobileOpen, setIsMenuMobileOpen] = useState(false)
+  const [accounts, setAccounts] = useState<Account[]>([])
 
   function handleOpenMenuMobile() {
     setIsMenuMobileOpen(true)
@@ -37,6 +34,11 @@ function Landing({ accounts }: LandingProps) {
   function handleCloseMenuMobile() {
     setIsMenuMobileOpen(false)
   }
+
+  useEffect(() =>  {
+    api.get<Account[]>('/accounts/last-four')
+      .then(response => setAccounts(response.data))
+  }, [])
 
   return (
     <LandingContainer>
@@ -108,7 +110,7 @@ function Landing({ accounts }: LandingProps) {
               {accounts?.map(account => (
                 <Image
                   key={account.id}
-                  src={account.avatarUrl}
+                  src={account?.avatarUrl ?? ""}
                   alt={account.name}
                   width={150}
                   height={150}
@@ -140,15 +142,3 @@ function Landing({ accounts }: LandingProps) {
 }
 
 export default Landing
-
-export const getServerSideProps = withSSRGuest(async ctx => {
-  const apiClient = setupApiClient(ctx)
-
-  const response = await apiClient.get<Account[]>('/accounts/last-four')
-
-  return {
-    props: {
-      accounts: response.data
-    }
-  }
-})

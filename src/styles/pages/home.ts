@@ -3,12 +3,16 @@ import styled from "styled-components"
 export const HomeContainer = styled.section`
     height: calc(100vh - 4.375rem);
     overflow-y: auto;
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
 `
 
 export const HomeWrapper = styled.div`
     max-width: 58.125rem;
-
     margin-top: 5rem;
+
     margin-left: auto;
     margin-right: auto;
 

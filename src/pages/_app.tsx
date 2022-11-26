@@ -6,20 +6,23 @@ import { GlobalStyle } from '../styles/global'
 import { defaultTheme } from '../styles/themes/default'
 import { PlaylistContextProvider } from '../contexts/PlaylistContext'
 import { PlayerContextProvider } from '../contexts/PlayerContext'
+import { EpisodesContextProvider } from '../contexts/EpisodesContext'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthContextProvider>
       <PlayerContextProvider>
-        <PlaylistContextProvider>
-          <ThemeProvider theme={defaultTheme}>
-            <Component {...pageProps} />
+        <EpisodesContextProvider>
+          <PlaylistContextProvider>
+              <ThemeProvider theme={defaultTheme}>
+                <Component {...pageProps} />
 
-            <GlobalStyle />
+                <GlobalStyle />
 
-            <Toaster />
-          </ThemeProvider>
-        </PlaylistContextProvider>
+                <Toaster />
+              </ThemeProvider>
+          </PlaylistContextProvider>
+        </EpisodesContextProvider>
       </PlayerContextProvider>
     </AuthContextProvider>
   )

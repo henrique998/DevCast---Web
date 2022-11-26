@@ -11,7 +11,7 @@ export type Playlist = {
 
 type PlaylistContextData = {
     playlists: Playlist[]
-    handleUpdateListOfPlaylists: (playlist: Playlist) => void
+    updateListOfPlaylists: (playlist: Playlist) => void
 }
 
 interface PlaylistContextProviderProps {
@@ -28,14 +28,14 @@ export function PlaylistContextProvider({ children }: PlaylistContextProviderPro
             .then(response => setPlaylists(response.data))
     }, [])
 
-    function handleUpdateListOfPlaylists(playlist: Playlist) {
+    function updateListOfPlaylists(playlist: Playlist) {
         setPlaylists(data => [playlist, ...data])
     }
 
     return (
         <PlaylistContext.Provider value={{
             playlists,
-            handleUpdateListOfPlaylists
+            updateListOfPlaylists
         }}>
             {children}
         </PlaylistContext.Provider>

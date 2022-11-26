@@ -1,10 +1,6 @@
 import styled, { css } from "styled-components"
 import * as Slider from "@radix-ui/react-slider"
 
-interface MobilePlayerContainerProps {
-    isShowingDetails: boolean
-}
-
 export const Container = styled.div`
     max-width: 400px;
     width: 100%;
@@ -16,33 +12,46 @@ export const Container = styled.div`
     padding: 0 1rem;
 `
 
-export const MobilePlayerContainer = styled.div<MobilePlayerContainerProps>`
+export const PlayerPreview = styled.div`
+    display: none;
+
+    width: 100%;
+    height: 4.375rem;
+    border-top: 1px solid ${props => props.theme.gray200};
+    background-color: ${props => props.theme.gray900};
+
+    position: fixed;
+    bottom: 4.375rem;
+    left: 0;
+    right: 0;
+    z-index: 100;
+
+    .content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    @media (max-width: 414px) {
+        display: block;
+    }
+`
+
+export const MobilePlayerContainer = styled.div`
     display: none;
 
     position: fixed;
-    bottom: -695px;
+    bottom: 4.375rem;
     left: 0;
     right: 0;
     z-index: 90;
 
-    /* transition: 2s; */
+    height: calc(100vh - 5.625rem);
 
-    ${props => props.isShowingDetails && css`
-        top: 0;
-    `}
-    
     background-color: ${props => props.theme.gray900};
 
-    .preview {
-        height: 4.375rem;
-        border-top: 1px solid ${props => props.theme.gray200};
-
-        .content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-    }
+    border-radius: 0.875rem 0.875rem 0 0;
+    border-top: 1px solid ${props => props.theme.gray300};
 
     header {
         .container {
@@ -60,7 +69,7 @@ export const MobilePlayerContainer = styled.div<MobilePlayerContainerProps>`
 `
 
 export const MobilePlayerContentContainer = styled.div`
-    margin-top: 3.125rem;
+    margin-top: 2rem;
 
     text-align: center;
 
@@ -81,10 +90,16 @@ export const MobilePlayerContentContainer = styled.div`
         .texts {
 
             h2 {
-                font-size: 1.5rem;
+                font-size: 1.25rem;
                 font-weight: 500;
 
                 margin-bottom: 1rem;
+
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             span {

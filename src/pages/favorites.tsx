@@ -1,8 +1,12 @@
+import { format, parseISO } from "date-fns"
+import { ptBR } from "date-fns/locale"
 import { MicrophoneSlash } from "phosphor-react"
 import { EpisodeCard } from "../components/EpisodeCard"
+import { usePlayer } from "../contexts/PlayerContext"
 import { DefaultLayout } from "../layouts/DefaultLayout"
 import { setupApiClient } from "../services/api"
 import { EmptyFavoritesEpisodesContainer, FavoritesContainer, FavoritesWrapper } from "../styles/pages/favorites"
+import { convertDurationToTimeString } from "../utils/convertDurationToTimeString"
 import { withSSRPrivate } from "../utils/withSSRPrivate"
 
 type Episode = {
@@ -11,10 +15,12 @@ type Episode = {
     title: string
     members: string
     publishedAt: string
-    duration: string
+    duration: number
+    durationAsString: string
     slug: string
     url: string
     type: string
+    accountId: string
 }
   
 interface FavoritesProps {
@@ -22,6 +28,8 @@ interface FavoritesProps {
 }
 
 function Favorites({ episodes }: FavoritesProps) {
+    const { playList } = usePlayer()
+
   return (
     <DefaultLayout>
       <FavoritesContainer>
@@ -37,15 +45,16 @@ function Favorites({ episodes }: FavoritesProps) {
 
             {episodes?.length > 0 ? (
                 <ul>
-                    {episodes?.map(episode => (
+                    {episodes?.map((episode, index) => (
                         <li key={episode.id}>
                             <EpisodeCard 
                                 path={`/episode/${episode.slug}`}
                                 imageUrl={episode.thumbnail}
-                                duration={episode.duration}
+                                duration={episode.durationAsString}
                                 title={episode.title}
                                 members={episode.members}
                                 publishedAt={episode.publishedAt}
+                                onPlay={() => playList(episodes, index)}
                             />
                         </li>
                     ))}
@@ -78,9 +87,14 @@ export const getServerSideProps = withSSRPrivate(async ctx => {
             title: episode.title,
             thumbnail: episode.thumbnail,
             slug: episode.slug,
+            url: episode.url,
             members: episode.members,
-            publishedAt: episode.publishedAt,
-            duration: episode.duration.toString(),
+            publishedAt: format(parseISO(episode.publishedAt), 'd MMM yy', {
+                locale: ptBR
+            }),
+            duration: episode.duration,
+            durationAsString: convertDurationToTimeString(episode.duration),
+            accountId: episode.accountId,
         }
     })
   

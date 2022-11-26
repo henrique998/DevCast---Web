@@ -3,6 +3,7 @@ import {
     CaretDown, 
     CaretUp, 
     HandsClapping, 
+    Pause, 
     Play, 
     Queue, 
     Repeat, 
@@ -28,123 +29,193 @@ import {
     MobileSliderTrack, 
     PlayControll, 
     PlayerControll, 
+    PlayerPreview, 
     PreviewMobileSliderContainer
 } from "./styles"
 import { ModalContent } from "../ModalContent"
+import { usePlayer } from "../../contexts/PlayerContext"
+import { convertDurationToTimeString } from "../../utils/convertDurationToTimeString"
+import { useEffect, useState } from "react"
+import { useEpisodes } from "../../contexts/EpisodesContext"
 
 export function MobilePlayer() {
-   const isShowingDetails = false 
+    const [isShowingDetails, setIsShowingDetails] = useState(false)
+
+    const { 
+        episodePlaying, 
+        progress, 
+        handleSeek,
+        isShuffling,
+        toggleShuffle,
+        episodeList,
+        playPrevious,
+        hasPrevious,
+        togglePlay,
+        toggleLoop,
+        isPlaying,
+        isLooping,
+        playNext,
+        hasNext,
+        clearPlayerState,
+    } = usePlayer()
+
+    const { 
+        isEpisodeFavorite, 
+        handleAddEpisodeToFavorites,
+        handleApplause,
+        hasEpisodeApplauded
+    } = useEpisodes()
+
+   useEffect(() =>  {
+    if (episodePlaying) {
+        setIsShowingDetails(true)
+    } else {
+        setIsShowingDetails(false)
+    }
+   }, [episodePlaying])
 
    return (
-    <MobilePlayerContainer isShowingDetails={isShowingDetails}>
-        <div className="preview">
-            <Container className="content">
-                <button>
-                    <CaretUp size={32} />
-                </button>
+       <>
+            {isShowingDetails ? (
+                <MobilePlayerContainer>
+                    <header>
+                        <Container className="container">
+                            <button onClick={() => setIsShowingDetails(false)}>
+                                <CaretDown size={32} />
+                            </button>
 
-                <PreviewMobileSliderContainer>
-                    <span>12:02</span>
+                            <strong>Tocando agora</strong>
 
-                    <MobileSliderRoot>
-                        <MobileSliderTrack>
-                            <MobileSliderRange />
-                        </MobileSliderTrack>
-
-                        <MobileSliderThumb />
-                    </MobileSliderRoot>
-
-                    <span>1:35:18</span>
-                </PreviewMobileSliderContainer>
-
-                <button>
-                    <X size={32} />
-                </button>
-            </Container>
-        </div>
-
-        <header>
-            <Container className="container">
-                <button>
-                    <CaretDown size={32} />
-                </button>
-
-                <strong>Tocando agora</strong>
-
-                <MobilePlayerButton isActive={false}>
-                    <Star size={32} weight="fill" />
-                </MobilePlayerButton>
-            </Container>
-        </header>
-
-        <MobilePlayerContentContainer>
-            <Container>
-                <Image 
-                    src="/card-image.png"
-                    alt=""
-                    width={825}
-                    height={825}
-                />
-
-                <div className="details">
-                    <Dialog.Root>
-                        <Dialog.Trigger asChild>
-                            <MobilePlayerButton isActive={false}>
-                                <Queue size={28} weight="fill" />
+                            <MobilePlayerButton
+                                isActive={isEpisodeFavorite} 
+                                onClick={handleAddEpisodeToFavorites}
+                                disabled={!episodePlaying}
+                            >
+                                <Star size={32} weight="fill" />
                             </MobilePlayerButton>
-                        </Dialog.Trigger>
+                        </Container>
+                    </header>
 
-                        <ModalContent />
-                    </Dialog.Root>
+                    <MobilePlayerContentContainer>
+                        <Container>
+                            <Image 
+                                src={episodePlaying?.thumbnail ?? ""}
+                                alt=""
+                                width={825}
+                                height={825}
+                            />
 
-                    <div className="texts">
-                        <h2>A vida é boa</h2>
+                            <div className="details">
+                                <Dialog.Root>
+                                    <Dialog.Trigger asChild>
+                                        <MobilePlayerButton isActive={false}>
+                                            <Queue size={28} weight="fill" />
+                                        </MobilePlayerButton>
+                                    </Dialog.Trigger>
 
-                        <span>Tiago, Diego e Pellizzetti</span>
-                    </div>
+                                    <ModalContent />
+                                </Dialog.Root>
 
-                    <MobilePlayerButton isActive>
-                        <HandsClapping size={28} weight="fill" />
-                    </MobilePlayerButton>
-                </div>
+                                <div className="texts">
+                                    <h2>{episodePlaying?.title}</h2>
 
-                <MobileSliderContainer>
-                    <span>12:02</span>
+                                    <span>{episodePlaying?.members}</span>
+                                </div>
 
-                        <MobileSliderRoot>
-                            <MobileSliderTrack>
-                                <MobileSliderRange />
-                            </MobileSliderTrack>
+                                <MobilePlayerButton 
+                                    isActive={hasEpisodeApplauded}
+                                    onClick={handleApplause}
+                                >
+                                    <HandsClapping size={28} weight="fill" />
+                                </MobilePlayerButton>
+                            </div>
 
-                            <MobileSliderThumb />
-                        </MobileSliderRoot>
+                            <MobileSliderContainer>
+                                <span>{convertDurationToTimeString(progress)}</span>
 
-                    <span>1:35:18</span>
-                </MobileSliderContainer>
+                                    <MobileSliderRoot
+                                        max={episodePlaying?.duration} 
+                                        value={[progress]}
+                                        onValueChange={e => handleSeek(e)}
+                                        disabled={!episodePlaying}
+                                    >
+                                        <MobileSliderTrack>
+                                            <MobileSliderRange />
+                                        </MobileSliderTrack>
 
-                <MobilePlayerControllsContainer>
-                    <MobilePlayerButton isActive={false}>
-                        <Shuffle size={32} weight="fill" />
-                    </MobilePlayerButton>
+                                        <MobileSliderThumb />
+                                    </MobileSliderRoot>
 
-                    <PlayerControll disabled>
-                        <SkipBack size={36} weight="fill" />
-                    </PlayerControll>
+                                <span>{convertDurationToTimeString(episodePlaying?.duration ?? 0)}</span>
+                            </MobileSliderContainer>
 
-                    <PlayControll>
-                        <Play size={36} weight="fill" />
-                    </PlayControll>
+                            <MobilePlayerControllsContainer>
+                                <MobilePlayerButton
+                                    isActive={isShuffling} 
+                                    onClick={toggleShuffle}
+                                    disabled={episodeList?.length === 1}
+                                >
+                                    <Shuffle size={32} weight="fill" />
+                                </MobilePlayerButton>
 
-                    <PlayerControll>
-                        <SkipForward size={36} weight="fill" />
-                    </PlayerControll>
+                                <PlayerControll onClick={playPrevious} disabled={!hasPrevious}>
+                                    <SkipBack size={36} weight="fill" />
+                                </PlayerControll>
 
-                    <MobilePlayerButton isActive={false}>
-                        <Repeat size={32} weight="fill" />
-                    </MobilePlayerButton>
-                </MobilePlayerControllsContainer>
-            </Container>
-        </MobilePlayerContentContainer>
-    </MobilePlayerContainer> 
+                                <PlayControll
+                                    onClick={togglePlay}
+                                    disabled={!episodePlaying}
+                                >
+                                    {isPlaying ? <Pause size={36} weight="fill" /> : <Play size={36} weight="fill" />}
+                                </PlayControll>
+
+                                <PlayerControll onClick={playNext} disabled={!hasNext}>
+                                    <SkipForward size={36} weight="fill" />
+                                </PlayerControll>
+
+                                <MobilePlayerButton
+                                    isActive={isLooping} 
+                                    onClick={toggleLoop}
+                                    disabled={!episodePlaying}
+                                >
+                                    <Repeat size={32} weight="fill" />
+                                </MobilePlayerButton>
+                            </MobilePlayerControllsContainer>
+                        </Container>
+                    </MobilePlayerContentContainer>
+                </MobilePlayerContainer> 
+            ) : (
+                <PlayerPreview>
+                    <Container className="content">
+                        <button onClick={() => setIsShowingDetails(true)}>
+                            <CaretUp size={32} />
+                        </button>
+
+                        <PreviewMobileSliderContainer>
+                            <span>{convertDurationToTimeString(progress)}</span>
+
+                            <MobileSliderRoot
+                                max={episodePlaying?.duration} 
+                                value={[progress]}
+                                onValueChange={e => handleSeek(e)}
+                                disabled={!episodePlaying}
+                            >
+                                <MobileSliderTrack>
+                                    <MobileSliderRange />
+                                </MobileSliderTrack>
+
+                                <MobileSliderThumb />
+                            </MobileSliderRoot>
+
+                            <span>{convertDurationToTimeString(episodePlaying?.duration ?? 0)}</span>
+                        </PreviewMobileSliderContainer>
+
+                        <button onClick={clearPlayerState}>
+                            <X size={32} />
+                        </button>
+                    </Container>
+                </PlayerPreview>
+            )}
+       </>
    )
 }

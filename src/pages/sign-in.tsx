@@ -20,6 +20,8 @@ import {
 } from "../styles/pages/sign-in"
 import { useAuth } from "../contexts/AuthContext"
 import { githubAuthUrl } from "../utils/githubAuthUrl"
+import { useState } from "react"
+import { withSSRGuest } from "../utils/withSSRGuest"
 
 const signInFormValidationSchema = zod.object({
   email: zod.string().min(1, "Campo obrigatório").email("Digite um e-mail válido"),
@@ -30,13 +32,21 @@ type SignInFormData = zod.infer<typeof signInFormValidationSchema>
 
 function SignIn() {
   const { signIn } = useAuth()
+  const [isLoading, setIsLoading] = useState(false)
 
   const { register, handleSubmit, formState, reset } = useForm<SignInFormData>({
     resolver: zodResolver(signInFormValidationSchema)
   })
 
   async function handleSignIn(data: SignInFormData) {
-    await signIn(data)
+    setIsLoading(true)
+
+    await signIn({
+      email: data.email,
+      password: data.password
+    })
+
+    setIsLoading(false)
 
     reset()
   }
@@ -91,7 +101,10 @@ function SignIn() {
               />
           </InputGroup>
 
-          <Button label="Entrar" />
+          <Button 
+            label={isLoading ? "carregando..." : "Entrar"} 
+            disabled={isLoading}
+          />
         </form>
 
         <Message>
@@ -106,16 +119,16 @@ function SignIn() {
 
       <BrandContainer>
         <div>
-            <Image 
-                src="/white-logo.svg"
-                alt=""
-                width={480}
-                height={144}
-            />
+          <Image 
+            src="/white-logo.svg"
+            alt=""
+            width={480}
+            height={144}
+          />
 
-            <h2>Episódios novos toda semana</h2>
+          <h2>Episódios novos toda semana</h2>
 
-            <span>fique por dentro das últimas novidades do universo da programação</span>
+          <span>fique por dentro das últimas novidades do universo da programação</span>
         </div>
       </BrandContainer>
     </SignInContainer>
@@ -123,3 +136,9 @@ function SignIn() {
 }
 
 export default SignIn
+
+export const getServerSideProps = withSSRGuest(async ctx => {
+  return {
+    props: {}
+  }
+})

@@ -161,12 +161,6 @@ export const ContentContainer = styled.div`
 export const PlaylistsWrapper = styled.div`
     margin-top: 1.25rem;
 
-    /* ul {
-        display: flex;
-        align-items: center;
-        gap: 1.25rem;
-    } */
-
     button {
         margin-top: 1.25rem;
     }

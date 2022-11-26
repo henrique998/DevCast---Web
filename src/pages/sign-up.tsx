@@ -19,6 +19,7 @@ import {
 } from "../styles/pages/sign-up"
 import { githubAuthUrl } from "../utils/githubAuthUrl"
 import { useAuth } from "../contexts/AuthContext"
+import { withSSRGuest } from "../utils/withSSRGuest"
 
 const signUpFormValidationSchema = zod.object({
   name: zod.string().min(1, "Campo obrigatório"),
@@ -131,3 +132,9 @@ function SignUp() {
 }
 
 export default SignUp
+
+export const getServerSideProps = withSSRGuest(async ctx => {
+  return {
+    props: {}
+  }
+})

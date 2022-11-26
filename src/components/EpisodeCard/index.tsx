@@ -11,6 +11,7 @@ interface EpisodeCardProps {
     duration: string
     members: string
     publishedAt: string
+    onPlay: () => void
 }
 
 export function EpisodeCard({ 
@@ -20,13 +21,14 @@ export function EpisodeCard({
     title, 
     duration,
     members, 
-    publishedAt 
+    publishedAt,
+    onPlay
 }: EpisodeCardProps) {
     
-    function handleClick(e: MouseEvent) {
+    function handlePlay(e: MouseEvent) {
         e.preventDefault()
 
-        alert('hello world')
+        onPlay()
     }
 
    return (
@@ -45,7 +47,7 @@ export function EpisodeCard({
 
             <div className="button-container">
                 <PlayButton 
-                    onClick={handleClick} 
+                    onClick={handlePlay} 
                 />
             </div>
         </div>

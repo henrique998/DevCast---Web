@@ -1,4 +1,3 @@
-import Image from "next/image"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as zod from "zod"
@@ -16,6 +15,7 @@ import toast from "react-hot-toast"
 import { Toast } from "../components/Toast"
 import { useAuth } from "../contexts/AuthContext"
 import { Avatar } from "../components/Avatar"
+import { withSSRPrivate } from "../utils/withSSRPrivate"
 
 const updateProfileDataFormValidationSchema = zod.object({
     name: zod.string(),
@@ -79,9 +79,9 @@ function Settings() {
     }
 
     async function handleUpdateProfile(data: UpdateProfileDataFormData) {
-        try {
-            setIsLoading(true)
+        setIsLoading(true)
 
+        try {
             const response = await api.put<IAxiosResponse>("/accounts/update", {
                 name: data.name.trim(),
                 email: data.email.trim(),
@@ -202,7 +202,7 @@ function Settings() {
                         />
                     </InputGroup>
 
-                    <Button label="Atualizar" disabled={isLoading} />
+                    <Button label={isLoading ? "carregando..." : "Atualizar"} disabled={isLoading} />
                 </Form>
             </SettingsContainer>
         </DefaultLayout>

@@ -29,12 +29,12 @@ import { Toast } from "../Toast"
 import { ChangeEvent, useState } from "react"
 import { SelectedThumbnail } from "../SelectedThumbnail"
 import { api } from "../../services/apiClient"
-import { Playlist } from "../../pages/playlists"
-import { usePlaylists } from "../../contexts/PlaylistContext"
+import { Playlist, usePlaylists } from "../../contexts/PlaylistContext"
+import { usePlayer } from "../../contexts/PlayerContext"
 
 interface ModalContentProps {
     hasPlaylistsCarroussel?: boolean
-    onCreate: (playlist: Playlist) => void
+    onCreate?: (playlist: Playlist) => void
 }
 
 const createNewPlaylistFormValidationSchema = zod.object({
@@ -47,8 +47,10 @@ type CreateNewPlaylistFormData = zod.infer<typeof createNewPlaylistFormValidatio
 export function ModalContent({ hasPlaylistsCarroussel = true, onCreate }: ModalContentProps) {
     const [image, setImage] = useState<File | null>(null)
     const [previewThumbnail, setPreviewThumbnail] = useState('')
+    const [selectedPlaylistId, setSelectedPlaylistId] = useState('')
 
-    const { playlists } = usePlaylists()
+    const { playlists, updateListOfPlaylists } = usePlaylists()
+    const { episodePlaying } = usePlayer()
 
     const { register, handleSubmit, formState, reset } = useForm<CreateNewPlaylistFormData>({
         resolver: zodResolver(createNewPlaylistFormValidationSchema)
@@ -81,9 +83,9 @@ export function ModalContent({ hasPlaylistsCarroussel = true, onCreate }: ModalC
         formData.append("coverImage", image)
 
         try {
-            const response = await api.post("/playlists", formData)
+            const response = await api.post<Playlist>("/playlists", formData)
 
-            onCreate(response.data)
+            updateListOfPlaylists(response.data)
             
             reset()
 
@@ -103,6 +105,24 @@ export function ModalContent({ hasPlaylistsCarroussel = true, onCreate }: ModalC
 
     }
 
+    async function handleAddEpisodeToPlaylist() {
+        if (!selectedPlaylistId || !episodePlaying.id) {
+            return;
+        }
+
+        try {
+            await api.post(`/playlists/add-episode/${episodePlaying.id}`, {
+                playlistId: selectedPlaylistId
+            })
+
+            setSelectedPlaylistId('')
+
+            alert('Episódio adicionado a playlist com sucesso!')
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
     const { errors } = formState
 
     const nameInputError = errors.name?.message
@@ -116,13 +136,22 @@ export function ModalContent({ hasPlaylistsCarroussel = true, onCreate }: ModalC
                     <XCircle size={24} />
                 </DialogClose>
 
-                <DialogTitle>{hasPlaylistsCarroussel ? 'Adicionar a playlist' : 'Criar playlist'}</DialogTitle>
+                <DialogTitle>
+                    {
+                        hasPlaylistsCarroussel 
+                        ? 'Adicionar a playlist' 
+                        : 'Criar playlist'
+                    }
+                </DialogTitle>
 
                 <ContentContainer>
                     {hasPlaylistsCarroussel && (
                         <>
                             <PlaylistsWrapper>
-                                <RadioGroup.Root>
+                                <RadioGroup.Root
+                                    value={selectedPlaylistId}
+                                    onValueChange={value => setSelectedPlaylistId(value)}
+                                >
                                     <Swiper
                                         slidesPerView={5}
                                         spaceBetween={20}
@@ -132,7 +161,7 @@ export function ModalContent({ hasPlaylistsCarroussel = true, onCreate }: ModalC
                                                 <li>
                                                     <PlaylistMiniCard 
                                                         value={playlist.id}
-                                                        thumbnail={playlist.coverImage} 
+                                                        thumbnail={playlist?.coverImage ?? ""} 
                                                         title={playlist.name}
                                                     />
                                                 </li>
@@ -141,7 +170,11 @@ export function ModalContent({ hasPlaylistsCarroussel = true, onCreate }: ModalC
                                     </Swiper>
                                 </RadioGroup.Root>
 
-                                <Button label="Adicionar" />
+                                <Button 
+                                    label="Adicionar" 
+                                    type="submit"
+                                    onClick={handleAddEpisodeToPlaylist}
+                                />
                             </PlaylistsWrapper>
 
                             <FormSeparator>

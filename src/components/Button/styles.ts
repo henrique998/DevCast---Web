@@ -38,6 +38,6 @@ export const ButtonContainer = styled.button<ButtonContainerProps>`
     transition: opacity 0.2s;
 
     &:disabled {
-        opacity: 0.85;
+        opacity: 0.5;
     }
 `
